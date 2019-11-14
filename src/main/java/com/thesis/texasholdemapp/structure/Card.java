@@ -51,28 +51,28 @@ public class Card {
                 throw new Exception(String.format("Wrong card suit: %s", stringSuit));
         }
 
-        CardRanking ranking;
+        CardRanking cardRanking;
         switch (stringRank) {
             case ("t"):
-                ranking = new CardRanking(CardRanking.TEN);
+                cardRanking = new CardRanking(CardRanking.TEN);
                 break;
             case ("j"):
-                ranking = new CardRanking(CardRanking.JACK);
+                cardRanking = new CardRanking(CardRanking.JACK);
                 break;
             case ("q"):
-                ranking = new CardRanking(CardRanking.QUEEN);
+                cardRanking = new CardRanking(CardRanking.QUEEN);
                 break;
             case ("k"):
-                ranking = new CardRanking(CardRanking.KING);
+                cardRanking = new CardRanking(CardRanking.KING);
                 break;
             case ("a"):
-                ranking = new CardRanking(CardRanking.ACE);
+                cardRanking = new CardRanking(CardRanking.ACE);
                 break;
             default:
                 try {
                     int numRanking = Integer.parseInt(stringRank);
                     if (numRanking >= 2 && numRanking <= 9) {
-                        ranking = new CardRanking(numRanking);
+                        cardRanking = new CardRanking(numRanking);
                     } else {
                         throw new Exception(String.format("Wrong card rank: %s", stringRank));
                     }
@@ -82,10 +82,10 @@ public class Card {
                 }
         }
 
-        return new Card(suit, ranking);
+        return new Card(suit, cardRanking);
     }
 
     public enum Suit {
-        CLUB, DIAMOND, HEART, SPADE
+        CLUB, DIAMOND, HEART, SPADE;
     }
 }
