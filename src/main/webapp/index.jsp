@@ -9,9 +9,20 @@
 <html lang="pl">
 <head>
     <title>Holdem equity calculator</title>
+    <link rel="webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    <h1>Tutaj bedzie aplikacja</h1>
+    <body>
+        <h1>Gracze:</h1>
+        <form action="post">
+            <label for="player1">Gracz 1:</label>
+            <input type="text" id="player1" /> <br/>
+            <label for="player2">Gracz 2:</label>
+            <input type="text" id="player2" /> <br/>
+            <input type="submit">
+        </form>
+        <hr />
+        <h1>Wynik:</h1>
 
-</body>
+        <script src="webjars/jquery/3.2.1/jquery.min.js"></script>
+        </body>
 </html>
