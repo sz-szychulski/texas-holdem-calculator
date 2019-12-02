@@ -21,16 +21,11 @@ public class CardRanking {
         return cardRanking;
     }
 
-    public void setCardRanking(int cardRanking) {
-        this.cardRanking = cardRanking;
-    }
-
     public CardRanking(int cardRanking) {
         this.cardRanking = cardRanking;
     }
 
-    @Override
-    public String toString() {
+    public String changeToString() {
         String stringCardRanking;
         switch (cardRanking) {
             case 10:
@@ -55,22 +50,22 @@ public class CardRanking {
     }
 
     public static CardRanking[] values() {
-        CardRanking[] allRanking = new CardRanking[13];
+        CardRanking[] allRankings = new CardRanking[13];
 
-        allRanking[0] = new CardRanking(TWO);
-        allRanking[1] = new CardRanking(THREE);
-        allRanking[2] = new CardRanking(FOUR);
-        allRanking[3] = new CardRanking(FIVE);
-        allRanking[4] = new CardRanking(SIX);
-        allRanking[5] = new CardRanking(SEVEN);
-        allRanking[6] = new CardRanking(EIGHT);
-        allRanking[7] = new CardRanking(NINE);
-        allRanking[8] = new CardRanking(TEN);
-        allRanking[9] = new CardRanking(JACK);
-        allRanking[10] = new CardRanking(QUEEN);
-        allRanking[11] = new CardRanking(KING);
-        allRanking[12] = new CardRanking(ACE);
+        allRankings[0]   = new CardRanking(TWO);
+        allRankings[1]   = new CardRanking(THREE);
+        allRankings[2]   = new CardRanking(FOUR);
+        allRankings[3]   = new CardRanking(FIVE);
+        allRankings[4]   = new CardRanking(SIX);
+        allRankings[5]   = new CardRanking(SEVEN);
+        allRankings[6]   = new CardRanking(EIGHT);
+        allRankings[7]   = new CardRanking(NINE);
+        allRankings[8]   = new CardRanking(TEN);
+        allRankings[9]   = new CardRanking(JACK);
+        allRankings[10]  = new CardRanking(QUEEN);
+        allRankings[11]  = new CardRanking(KING);
+        allRankings[12]  = new CardRanking(ACE);
 
-        return allRanking;
+        return allRankings;
     }
 }
