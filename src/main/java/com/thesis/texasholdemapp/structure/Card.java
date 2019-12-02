@@ -1,20 +1,16 @@
 package com.thesis.texasholdemapp.structure;
 
-public class Card implements Comparable<Card> {
-    private Suit suit;
+public class Card {
     private CardRanking ranking;
+    private CardSuit suit;
 
-    public Card(Suit suit, CardRanking ranking) {
+    public enum CardSuit {
+        CLUB, DIAMOND, HEART, SPADE
+    }
+
+    public Card(CardSuit suit, CardRanking ranking) {
         this.suit = suit;
         this.ranking = ranking;
-    }
-
-    public Suit getSuit() {
-        return suit;
-    }
-
-    public void setSuit(Suit suit) {
-        this.suit = suit;
     }
 
     public CardRanking getRank() {
@@ -25,7 +21,15 @@ public class Card implements Comparable<Card> {
         this.ranking = ranking;
     }
 
-    public static Card fromString(String value) throws Exception {
+    public CardSuit getSuit() {
+        return suit;
+    }
+
+    public void setSuit(CardSuit suit) {
+        this.suit = suit;
+    }
+
+    public static Card fromString(String value) throws Exception{
         if(value.length() != 2) {
             throw new Exception(String.format("Invalid card value: %s", value));
         }
@@ -33,19 +37,19 @@ public class Card implements Comparable<Card> {
         String stringRank = value.substring(0, 1).toLowerCase();
         String stringSuit = value.substring(1, 2).toLowerCase();
 
-        Suit suit;
+        CardSuit cardSuit;
         switch (stringSuit) {
             case ("c"):
-                suit = Suit.CLUB;
+                cardSuit = CardSuit.CLUB;
                 break;
             case ("d"):
-                suit = Suit.DIAMOND;
+                cardSuit = CardSuit.DIAMOND;
                 break;
             case ("h"):
-                suit = Suit.HEART;
+                cardSuit = CardSuit.HEART;
                 break;
             case ("s"):
-                suit = Suit.SPADE;
+                cardSuit = CardSuit.SPADE;
                 break;
             default:
                 throw new Exception(String.format("Wrong card suit: %s", stringSuit));
@@ -81,16 +85,6 @@ public class Card implements Comparable<Card> {
                     throw new Exception(String.format("Wrong card rank: %s", stringRank));
                 }
         }
-
-        return new Card(suit, cardRanking);
-    }
-
-    @Override
-    public int compareTo(Card card) {
-        return card.getRank().getCardRanking() - this.getRank().getCardRanking();
-    }
-
-    public enum Suit {
-        CLUB, DIAMOND, HEART, SPADE;
+        return new Card(cardSuit, cardRanking);
     }
 }
