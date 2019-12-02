@@ -1,15 +1,16 @@
 package com.thesis.texasholdemapp.structure;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class HandRanking {
 
     private HandRanking.Ranking handRanking;
-    private ArrayList<CardRanking> cardRankings;
+    private ArrayList<CardRanking> highCardRanking;
 
-    public HandRanking(Ranking handRanking, ArrayList<CardRanking> cardRankings) {
+    public HandRanking(Ranking handRanking, ArrayList<CardRanking> highCardRanking) {
         this.handRanking = handRanking;
-        this.cardRankings = cardRankings;
+        this.highCardRanking = highCardRanking;
     }
 
     public Ranking getHandRanking() {
@@ -21,14 +22,29 @@ public class HandRanking {
     }
 
     public ArrayList<CardRanking> getCardRankings() {
-        return cardRankings;
+        return highCardRanking;
     }
 
     public void setCardRankings(ArrayList<CardRanking> cardRankings) {
-        this.cardRankings = cardRankings;
+        this.highCardRanking = cardRankings;
     }
 
+    public void addHighCard(CardRanking cardRanking) {
+        highCardRanking.add(cardRanking);
+    }
 
+    public static HandRanking evaluate(Card... inputCards) {
+        HandRanking handRanking;
+
+        ArrayList<Card> cards = new ArrayList<Card>();
+        for (Card card : inputCards) {
+            cards.add(card);
+        }
+
+        Collections.sort(cards);
+
+
+    }
 
     public enum Ranking {
         HIGH_CARD, PAIR, TWO_PAIR, TRIPS, STRAIGHT, FLUSH, FULL_HOUSE, QUADS, STRAIGHT_FLUSH;
