@@ -1,16 +1,13 @@
 package com.thesis.texasholdemapp.structure;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 
 public class HandRanking {
-
     private HandRanking.Ranking handRanking;
     private ArrayList<CardRanking> highCardRanking;
 
-    public HandRanking(Ranking handRanking, ArrayList<CardRanking> highCardRanking) {
+    public HandRanking(Ranking handRanking) {
         this.handRanking = handRanking;
-        this.highCardRanking = highCardRanking;
     }
 
     public Ranking getHandRanking() {
@@ -34,19 +31,13 @@ public class HandRanking {
     }
 
     public static HandRanking evaluate(Card... inputCards) {
-        HandRanking handRanking;
-
-        ArrayList<Card> cards = new ArrayList<Card>();
-        for (Card card : inputCards) {
-            cards.add(card);
-        }
-
+        ArrayList<Card> cards = new ArrayList<>(Arrays.asList(inputCards));
         Collections.sort(cards);
 
-        ArrayList<Card> clubCards 		= new ArrayList<Card>();
-        ArrayList<Card> diamondCards 	= new ArrayList<Card>();
-        ArrayList<Card> heartCards 		= new ArrayList<Card>();
-        ArrayList<Card> spadeCards 		= new ArrayList<Card>();
+        ArrayList<Card> clubCards 		= new ArrayList<>();
+        ArrayList<Card> diamondCards 	= new ArrayList<>();
+        ArrayList<Card> heartCards 		= new ArrayList<>();
+        ArrayList<Card> spadeCards 		= new ArrayList<>();
 
         for (Card card : cards) {
             if (card.getSuit() == Card.CardSuit.CLUB)
@@ -66,8 +57,9 @@ public class HandRanking {
         ArrayList<Card> flushCards      = null;
 
         int inputCardsCount = inputCards.length;
+        HandRanking handRanking;
 
-        //for 5 and more cards
+        //for 5 and more cards [STRAIGHT_FLUSH]
         if(inputCardsCount >= 5) {
             if (clubCards.size() >= 5) {
                 clubFlush = true;
@@ -86,111 +78,117 @@ public class HandRanking {
                 flushCards = spadeCards;
             }
 
-            if(flushCards != null || flushCards.isEmpty()) {
-                ArrayList<CardRanking> straightCards = new ArrayList<CardRanking>();
+            if(flushCards != null) {
+                ArrayList<CardRanking> straightCards = new ArrayList<>();
 
                 CardRanking cardRanking = flushCards.get(0).getRank();
                 int straightCount = 1;
                 straightCards.add(cardRanking);
 
-                for(int cardIndex = 1; cardIndex < flushCards.size(); cardIndex++) {
-                    int compareRanks = cardRanking.compareTo(flushCards.get().getRank());
+                for(int index = 1; index < flushCards.size(); index++) {
+                    int compareRanks = cardRanking.compareTo(flushCards.get(index).getRank());
+
                     if(straightCount == 3) {
-                        Card lowestCard = flushCards.get(i);
+                        Card lowestCard = flushCards.get(index);
                         Card highestCard = flushCards.get(0);
 
-                        if(highestCard.getRank().ordinal() == CardRank.ACE && lowestCard.getRank().ordinal() == CardRank.TWO) {
-                            ranking = new HandRanking(Ranking.STRAIGHT_FLUSH);
-                            for(CardRank cr : straightCards) {
-                                ranking.addHighCard(cr);
+                        if(highestCard.getRank().getCardRanking() == CardRanking.ACE &&
+                                lowestCard.getRank().getCardRanking() == CardRanking.TWO) {
+
+                            handRanking = new HandRanking(Ranking.STRAIGHT_FLUSH);
+
+                            for(CardRanking currentCardRanking : straightCards) {
+                                handRanking.addHighCard(currentCardRanking);
                             }
-                            ranking.addHighCard(lowestCard.getRank());
-                            ranking.addHighCard(highestCard.getRank());
-                            return ranking;
+
+                            handRanking.addHighCard(lowestCard.getRank());
+                            handRanking.addHighCard(highestCard.getRank());
+                            return handRanking;
                         }
                     }
-                    if(cmp != 1) {
-                        straightCards = new ArrayList<CardRank>();
+
+                    if(compareRanks != 1) {
+                        straightCards = new ArrayList<CardRanking>();
                         straightCount = 0;
                     }
 
-                    r = flushCards.get(i).getRank();
+                    cardRanking = flushCards.get(index).getRank();
                     straightCount++;
-                    straightCards.add(r);
-
+                    straightCards.add(cardRanking);
 
                     if(straightCount == 5) {
-                        ranking = new HandRanking(Ranking.STRAIGHT_FLUSH);
-                        for(CardRank cr : straightCards) {
-                            ranking.addHighCard(cr);
+                        handRanking = new HandRanking(Ranking.STRAIGHT_FLUSH);
+                        for(CardRanking currentCardRanking : straightCards) {
+                            handRanking.addHighCard(currentCardRanking);
                         }
-                        return ranking;
+                        return handRanking;
                     }
                 }
             }
         }
 
+        // for 4 and more cards [QUADS]
+        if(inputCardsCount >= 4) {
+            HashMap<Integer, Integer> rankCounts = new HashMap<>();
 
-        if(cardsCount >= 4) {
-            // Look for four of a kind
-            HashMap<Integer, Integer> rankCounts = new HashMap<Integer, Integer>();
-
-            for(int i = 0; i < cardsCount; i++) {
-                Integer cardRankInt = new Integer(pCards[i].getRank().value());
+            for (Card inputCard : inputCards) {
+                Integer cardRankInt = inputCard.getRank().getCardRanking();
                 Integer count = rankCounts.get(cardRankInt);
 
-                if(count == null)
-                    count = new Integer(1);
-                else
+                if (count == null) {
+                    count = 1;
+                } else {
                     count += 1;
+                }
 
                 rankCounts.put(cardRankInt, count);
             }
 
-
-
-            for (Map.Entry<Integer, Integer> entry : rankCounts.entrySet())
-            {
+            for (Map.Entry<Integer, Integer> entry : rankCounts.entrySet()) {
                 if(entry.getValue() == 4) {
-                    CardRank quadsRank = new CardRank(entry.getKey());
+                    CardRanking quadRank = new CardRanking(entry.getKey());
 
-                    ranking = new HandRanking(Ranking.QUADS);
-                    ranking.addHighCard(quadsRank);
-                    for(Card c : cards) {
-                        CardRank cr = c.getRank();
-                        if(!cr.equals(quadsRank) && !cr.equals(quadsRank)) {
-                            ranking.addHighCard(cr);
+                    handRanking = new HandRanking(Ranking.QUADS);
+                    handRanking.addHighCard(quadRank);
+                    for(Card card : cards) {
+                        CardRanking cardRanking = card.getRank();
+                        if(!cardRanking.equals(quadRank) && !cardRanking.equals(quadRank)) {
+                            handRanking.addHighCard(cardRanking);
                             break;
                         }
                     }
 
-                    return ranking;
+                    return handRanking;
                 }
             }
         }
 
-        if(cardsCount >= 5) {
-            // Look for full house
-            ArrayList<CardRank> pairRanks 		= new ArrayList<CardRank>();
-            ArrayList<CardRank> tripRanks 		= new ArrayList<CardRank>();
+        // for 5 and more cards [FULL_HOUSE], [FLUSH] and [STRAIGHT]
+        if(inputCardsCount >= 5) {
+            // [FULL_HOUSE]
+            ArrayList<CardRanking> pairRanks = new ArrayList<>();
+            ArrayList<CardRanking> tripRanks = new ArrayList<>();
 
 
-            for(int i = 0; i < cardsCount; i++) {
-                for(int j = i + 1; j < cardsCount; j++) {
-                    boolean foundTrips = false;
-                    for(int k = j + 1; k < cardsCount; k++) {
-                        if(pCards[i].getRank().equals(pCards[j].getRank()) &&
-                                pCards[i].getRank().equals(pCards[k].getRank()) &&
-                                !tripRanks.contains(pCards[i].getRank())) {
+            for(int cardIndex = 0; cardIndex < inputCardsCount; cardIndex++) {
+                for(int secondCardIndex = cardIndex + 1; secondCardIndex < inputCardsCount; secondCardIndex++) {
+                    boolean isTrips = false;
+                    for(int thirdCardIndex = secondCardIndex + 1; thirdCardIndex < inputCardsCount; thirdCardIndex++) {
+                        if(inputCards[cardIndex].getRank().equals(inputCards[secondCardIndex].getRank()) &&
+                                inputCards[cardIndex].getRank().equals(inputCards[thirdCardIndex].getRank()) &&
+                                !tripRanks.contains(inputCards[cardIndex].getRank())) {
 
-                            tripRanks.add(pCards[i].getRank());
-                            foundTrips = true;
+                            tripRanks.add(inputCards[cardIndex].getRank());
+                            isTrips = true;
                         }
                     }
 
 
-                    if(!foundTrips && pCards[i].getRank().equals(pCards[j].getRank()) && !pairRanks.contains(pCards[i].getRank()) && !tripRanks.contains(pCards[i].getRank())) {
-                        pairRanks.add(pCards[i].getRank());
+                    if(!isTrips && inputCards[cardIndex].getRank().equals(inputCards[secondCardIndex].getRank()) &&
+                            !pairRanks.contains(inputCards[cardIndex].getRank()) &&
+                            !tripRanks.contains(inputCards[cardIndex].getRank())) {
+
+                        pairRanks.add(inputCards[cardIndex].getRank());
                     }
                 }
             }
@@ -198,128 +196,129 @@ public class HandRanking {
             if(pairRanks.size() > 0 && tripRanks.size() > 0) {
                 Collections.sort(pairRanks);
 
-                ranking = new HandRanking(Ranking.FULL_HOUSE);
-                ranking.addHighCard(tripRanks.get(0));
-                ranking.addHighCard(pairRanks.get(0));
-                return ranking;
+                handRanking = new HandRanking(Ranking.FULL_HOUSE);
+                handRanking.addHighCard(tripRanks.get(0));
+                handRanking.addHighCard(pairRanks.get(0));
+
+                return handRanking;
             }
 
-
-
-
-            // Look for flush
-            if (clubFlush) 			flushCards = clubCards;
-            else if (diamondFlush) 	flushCards = diamondCards;
-            else if (heartFlush) 	flushCards = heartCards;
-            else if (spadeFlush) 	flushCards = spadeCards;
+            // [FLUSH]
+            if (clubFlush) {
+                flushCards = clubCards;
+            } else if (diamondFlush) {
+                flushCards = diamondCards;
+            } else if (heartFlush) {
+                flushCards = heartCards;
+            } else if (spadeFlush) {
+                flushCards = spadeCards;
+            }
 
             if(flushCards != null) {
-                ranking = new HandRanking(Ranking.FLUSH);
-                for (int flush = 0; flush < 5; flush++)
-                    ranking.addHighCard(flushCards.get(flush).getRank());
-                return ranking;
+                handRanking = new HandRanking(Ranking.FLUSH);
+
+                for (int cardIndex = 0; cardIndex < 5; cardIndex++) {
+                    handRanking.addHighCard(flushCards.get(cardIndex).getRank());
+                }
+
+                return handRanking;
             }
 
-
-
-            // Look for straight
-            for(int i = 0; i < cardsCount - 3; i++) {
-                CardRank r = cards.get(i).getRank();
+            // [STRAIGHT]
+            for(int cardIndex = 0; cardIndex < inputCardsCount - 3; cardIndex++) {
+                CardRanking cardRanking = cards.get(cardIndex).getRank();
                 int straightCount = 0;
 
-                ArrayList<CardRank> straightCards = new ArrayList<CardRank>();
-                straightCards.add(r);
+                ArrayList<CardRanking> straightCards = new ArrayList<>();
+                straightCards.add(cardRanking);
 
-                for(int j = i + 1; j < cards.size(); j++) {
-                    CardRank r2 = cards.get(j).getRank();
-                    int cmp = r.compareTo(r2);
+                for(int secondCardIndex = cardIndex + 1; secondCardIndex < cards.size(); secondCardIndex++) {
+                    CardRanking secondCardRanking = cards.get(secondCardIndex).getRank();
+                    int compareTo = cardRanking.compareTo(secondCardRanking);
 
-                    if(cmp == 0)
+                    if(compareTo == 0) {
                         continue;
-                    else if(cmp != 1)
+                    } else if(compareTo != 1) {
                         break;
+                    }
 
-
-                    r = cards.get(j).getRank();
-                    straightCards.add(r);
-
+                    cardRanking = cards.get(secondCardIndex).getRank();
+                    straightCards.add(cardRanking);
 
                     straightCount++;
                     if(straightCount == 4) {
-                        ranking = new HandRanking(Ranking.STRAIGHT);
-                        for(CardRank cr : straightCards) {
-                            ranking.addHighCard(cr);
+                        handRanking = new HandRanking(Ranking.STRAIGHT);
+                        for(CardRanking currentCardRanking : straightCards) {
+                            handRanking.addHighCard(currentCardRanking);
                         }
-                        return ranking;
+                        return handRanking;
                     }
                 }
 
-                if(straightCount == 3 && i+1 == cardsCount - 3) {
-                    Card lowestCard = cards.get(i+3);
+                if(straightCount == 3 && (cardIndex + 1) == (inputCardsCount - 3)) {
+                    Card lowestCard = cards.get(cardIndex + 3);
                     Card highestCard = cards.get(0);
-                    if(highestCard.getRank().ordinal() == CardRank.ACE && lowestCard.getRank().ordinal() == CardRank.TWO) {
-                        ranking = new HandRanking(Ranking.STRAIGHT);
-                        for(CardRank cr : straightCards) {
-                            ranking.addHighCard(cr);
+
+                    if(highestCard.getRank().getCardRanking() == CardRanking.ACE &&
+                            lowestCard.getRank().getCardRanking() == CardRanking.TWO) {
+
+                        handRanking = new HandRanking(Ranking.STRAIGHT);
+                        for(CardRanking currentCardRanking : straightCards) {
+                            handRanking.addHighCard(currentCardRanking);
                         }
-                        ranking.addHighCard(highestCard.getRank());
-                        return ranking;
+                        handRanking.addHighCard(highestCard.getRank());
+                        return handRanking;
                     }
                 }
             }
         }
 
+        // for 3 and more cards [TRIPS]
+        if(inputCardsCount >= 3) {
+            ArrayList<CardRanking> tripRanks = new ArrayList<>();
 
+            for(int cardIndex = 0; cardIndex < inputCardsCount; cardIndex++) {
+                for(int secondCardIndex = cardIndex + 1; secondCardIndex < inputCardsCount; secondCardIndex++) {
+                    for(int thirdCardIndex = secondCardIndex + 1; thirdCardIndex < inputCardsCount; thirdCardIndex++) {
+                        if(inputCards[cardIndex].getRank().equals(inputCards[cardIndex].getRank()) &&
+                                inputCards[cardIndex].getRank().equals(inputCards[thirdCardIndex].getRank()) &&
+                                !tripRanks.contains(inputCards[cardIndex].getRank())) {
 
-        if(cardsCount >= 3) {
-            // Look for three of a kind
-            ArrayList<CardRank> tripRanks 		= new ArrayList<CardRank>();
-
-
-            for(int i = 0; i < cardsCount; i++) {
-                for(int j = i + 1; j < cardsCount; j++) {
-                    for(int k = j + 1; k < cardsCount; k++) {
-                        if(pCards[i].getRank().equals(pCards[j].getRank()) &&
-                                pCards[i].getRank().equals(pCards[k].getRank()) &&
-                                !tripRanks.contains(pCards[i].getRank())) {
-
-                            tripRanks.add(pCards[i].getRank());
-                            i = j = k = cardsCount;
+                            tripRanks.add(inputCards[cardIndex].getRank());
+                            cardIndex = secondCardIndex = thirdCardIndex = inputCardsCount;
                         }
                     }
                 }
             }
 
             if(tripRanks.size() > 0) {
-                ranking = new HandRanking(Ranking.TRIPS);
-                ranking.addHighCard(tripRanks.get(0));
+                handRanking = new HandRanking(Ranking.TRIPS);
+                handRanking.addHighCard(tripRanks.get(0));
 
-                int maxCnt = 2;
-                for(Card c : cards) {
-                    CardRank cr = c.getRank();
-                    if(!cr.equals(tripRanks.get(0))) {
-                        ranking.addHighCard(cr);
-                        maxCnt--;
-
-                        if(maxCnt == 0)		break;
+                int maxCards = 2;
+                for(Card card : cards) {
+                    CardRanking cardRanking = card.getRank();
+                    if(!cardRanking.equals(tripRanks.get(0))) {
+                        handRanking.addHighCard(cardRanking);
+                        maxCards--;
+                        if(maxCards == 0) { break; }
                     }
                 }
 
-
-                return ranking;
+                return handRanking;
             }
         }
 
+        // for 4 and more cards [TWO_PAIRS]
+        if(inputCardsCount >= 4) {
+            ArrayList<CardRanking> pairRanks = new ArrayList<>();
 
+            for(int cardIndex = 0; cardIndex < inputCardsCount; cardIndex++) {
+                for(int secondCardIndex = cardIndex + 1; secondCardIndex < inputCardsCount; secondCardIndex++) {
+                    if(inputCards[cardIndex].getRank().equals(inputCards[secondCardIndex].getRank()) &&
+                            !pairRanks.contains(inputCards[cardIndex].getRank())) {
 
-        if(cardsCount >= 4) {
-            // Look for two pairs
-            ArrayList<CardRank> pairRanks 		= new ArrayList<CardRank>();
-
-            for(int i = 0; i < cardsCount; i++) {
-                for(int j = i + 1; j < cardsCount; j++) {
-                    if(pCards[i].getRank().equals(pCards[j].getRank()) && !pairRanks.contains(pCards[i].getRank())) {
-                        pairRanks.add(pCards[i].getRank());
+                        pairRanks.add(inputCards[cardIndex].getRank());
                     }
                 }
             }
@@ -327,59 +326,52 @@ public class HandRanking {
             if(pairRanks.size() == 2) {
                 Collections.sort(pairRanks);
 
-                ranking = new HandRanking(Ranking.TWO_PAIRS);
-                ranking.addHighCard(pairRanks.get(1));
-                ranking.addHighCard(pairRanks.get(0));
-                for(Card c : cards) {
-                    CardRank cr = c.getRank();
-                    if(!cr.equals(pairRanks.get(0)) && !cr.equals(pairRanks.get(1))) {
-                        ranking.addHighCard(cr);
+                handRanking = new HandRanking(Ranking.TWO_PAIRS);
+                handRanking.addHighCard(pairRanks.get(1));
+                handRanking.addHighCard(pairRanks.get(0));
+                for(Card card : cards) {
+                    CardRanking cardRanking = card.getRank();
+                    if(!cardRanking.equals(pairRanks.get(0)) && !cardRanking.equals(pairRanks.get(1))) {
+                        handRanking.addHighCard(cardRanking);
                         break;
                     }
                 }
-                return ranking;
+                return handRanking;
             }
         }
 
+        // single [PAIR]
+        for(int cardIndex = 0; cardIndex < inputCardsCount; cardIndex++) {
+            for(int secondCardIndex = cardIndex + 1; secondCardIndex < inputCardsCount; secondCardIndex++) {
+                if(inputCards[cardIndex].getRank().equals(inputCards[secondCardIndex].getRank())) {
+                    handRanking = new HandRanking(Ranking.PAIR);
+                    handRanking.addHighCard(inputCards[cardIndex].getRank());
 
-        // Look for a pair
-        for(int i = 0; i < cardsCount; i++) {
-            for(int j = i + 1; j < cardsCount; j++) {
-                if(pCards[i].getRank().equals(pCards[j].getRank())) {
-                    ranking = new HandRanking(Ranking.PAIR);
-                    ranking.addHighCard(pCards[i].getRank());
-
-                    int maxCnt = 3;
-                    for(Card c : cards) {
-                        CardRank cr = c.getRank();
-                        if(!cr.equals(pCards[i].getRank())) {
-                            ranking.addHighCard(cr);
-                            maxCnt--;
-
-                            if(maxCnt == 0)		break;
+                    int maxCards = 3;
+                    for(Card card : cards) {
+                        CardRanking cardRanking = card.getRank();
+                        if(!cardRanking.equals(inputCards[cardIndex].getRank())) {
+                            handRanking.addHighCard(cardRanking);
+                            maxCards--;
+                            if(maxCards == 0) { break; }
                         }
                     }
 
-
-                    return ranking;
+                    return handRanking;
                 }
             }
         }
 
-
-
-        // Highcard
-        ranking = new HandRanking(Ranking.HIGH_CARD);
-        for(int i = 0; i < cardsCount && i < 5; i++) {
-            ranking.addHighCard(cards.get(i).getRank());
+        // [HIGH_CARD]
+        handRanking = new HandRanking(Ranking.HIGH_CARD);
+        for(int cardIndex = 0; cardIndex < inputCardsCount && cardIndex < 5; cardIndex++) {
+            handRanking.addHighCard(cards.get(cardIndex).getRank());
         }
 
-        return ranking;
-
-
+        return handRanking;
     }
 
     public enum Ranking {
-        HIGH_CARD, PAIR, TWO_PAIR, TRIPS, STRAIGHT, FLUSH, FULL_HOUSE, QUADS, STRAIGHT_FLUSH;
+        HIGH_CARD, PAIR, TWO_PAIRS, TRIPS, STRAIGHT, FLUSH, FULL_HOUSE, QUADS, STRAIGHT_FLUSH;
     }
 }
