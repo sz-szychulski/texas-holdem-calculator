@@ -1,6 +1,6 @@
 package com.thesis.texasholdemapp.structure;
 
-public class Card {
+public class Card implements Comparable<Card> {
     private CardRanking ranking;
     private CardSuit suit;
 
@@ -86,5 +86,10 @@ public class Card {
                 }
         }
         return new Card(cardSuit, cardRanking);
+    }
+
+    @Override
+    public int compareTo(Card card) {
+        return card.getRank().getCardRanking() - this.getRank().getCardRanking();
     }
 }
