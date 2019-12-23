@@ -2,7 +2,7 @@ package com.thesis.texasholdemapp.structure;
 
 import java.util.*;
 
-public class HandRanking {
+public class HandRanking implements Comparable<HandRanking>{
     private HandRanking.Ranking handRanking;
     private ArrayList<CardRanking> highCardRanking;
 
@@ -18,7 +18,7 @@ public class HandRanking {
         this.handRanking = handRanking;
     }
 
-    public ArrayList<CardRanking> getCardRankings() {
+    public ArrayList<CardRanking> getHighCardRanking() {
         return highCardRanking;
     }
 
@@ -369,6 +369,28 @@ public class HandRanking {
         }
 
         return handRanking;
+    }
+
+    @Override
+    public int compareTo(HandRanking inputHandRanking) {
+        int compare = this.handRanking.compareTo(inputHandRanking.getHandRanking());
+        if(compare == 0) {
+            ArrayList<CardRanking> highCards = inputHandRanking.getHighCardRanking();
+            int highCardSize = this.highCardRanking.size();
+            int highCardArraySize = highCards.size();
+
+            if (highCardSize == highCardArraySize) {
+                for(int index = 0; index < highCardSize; index++) {
+                    int compareHighCards = this.highCardRanking.get(index).compareTo(highCards.get(index));
+                    if(compareHighCards != 0) {
+                        return compareHighCards;
+                    }
+                }
+            } else {
+                return highCardSize - highCardArraySize;
+            }
+        }
+        return compare;
     }
 
     public enum Ranking {
