@@ -110,11 +110,28 @@ public class EquityCalculator {
     }
 
     public EquityCalculator setBoardCards(Card... cards) throws Exception {
+        boardCards.clear();
+
         if (cards.length != 3 && cards.length != 4 && cards.length != 5) {
             throw new Exception("Bord ma miec 3, 4 albo 5 kart");
         }
 
         boardCards.addAll(Arrays.asList(cards));
+
+        return this;
+    }
+
+    public EquityCalculator setBoardFromString(String stringCards) throws Exception {
+        boardCards.clear();
+
+        stringCards.replaceAll("\\s", "").replaceAll(",","");
+        for(int index = 0; index + 1 < stringCards.length(); index += 2) {
+            boardCards.add(Card.fromString(stringCards.substring(index, index + 2)));
+        }
+
+        if (boardCards.size() != 3 && boardCards.size() != 4 && boardCards.size() != 5) {
+            throw new Exception("Stol ma miec 3,4 albo 5 kart, mowilem");
+        }
 
         return this;
     }
