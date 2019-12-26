@@ -393,6 +393,77 @@ public class HandRanking implements Comparable<HandRanking>{
         return compare;
     }
 
+    //Need to convert to upper cases before
+    @Override
+    public String toString() {
+        String ranking = "";
+        StringBuilder cards = new StringBuilder();
+
+        if(handRanking == Ranking.HIGH_CARD)            ranking = "Wysoka karta";
+        else if(handRanking == Ranking.PAIR)            ranking = "Para";
+        else if(handRanking == Ranking.TWO_PAIRS)       ranking = "Dwie pary";
+        else if(handRanking == Ranking.TRIPS)           ranking = "Trójka";
+        else if(handRanking == Ranking.STRAIGHT)        ranking = "Strit";
+        else if(handRanking == Ranking.FLUSH)           ranking = "Kolor";
+        else if(handRanking == Ranking.FULL_HOUSE)      ranking = "Full";
+        else if(handRanking == Ranking.QUADS)           ranking = "Kareta";
+        else if (handRanking == Ranking.STRAIGHT_FLUSH) ranking = "Poker";
+
+        if(handRanking == Ranking.HIGH_CARD || handRanking == Ranking.STRAIGHT ||
+           handRanking == Ranking.FLUSH || handRanking == Ranking.STRAIGHT_FLUSH) {
+            for(CardRanking cardRanking : highCardRanking) {
+                if(cards.length() > 0)
+                    cards.append(", ");
+
+                cards.append(cardRanking.toString());
+            }
+        } else if(handRanking == Ranking.PAIR) {
+            cards.append(highCardRanking.get(0).toString());
+
+            StringBuilder strHighSingleCards = new StringBuilder();
+            for(int index = 1; index < highCardRanking.size(); index++) {
+                if(strHighSingleCards.length() > 0)
+                    strHighSingleCards.append(",");
+
+                strHighSingleCards.append(highCardRanking.get(index));
+            }
+
+            if(strHighSingleCards.length() > 0)
+                cards.append(" - ").append(strHighSingleCards);
+
+        } else if(handRanking == Ranking.TWO_PAIRS) {
+            cards.append(highCardRanking.get(0).toString()).append(" i ").append(highCardRanking.get(1).toString());
+
+            if(highCardRanking.size() > 2)		cards.append(" - ").append(highCardRanking.get(2));
+
+        }
+        else if(handRanking == Ranking.TRIPS || handRanking == Ranking.QUADS) {
+            cards.append(highCardRanking.get(0).toString());
+
+            if(handRanking == Ranking.QUADS) {
+                if(highCardRanking.size() > 1)		cards.append(" - ").append(highCardRanking.get(1));
+            }
+            else if(handRanking == Ranking.TRIPS) {
+                if(highCardRanking.size() == 2) {
+                    cards.append(" - ").append(highCardRanking.get(1));
+                }
+                else if(highCardRanking.size() > 2) {
+                    cards.append(" - ").append(highCardRanking.get(1)).append(", ").append(highCardRanking.get(2));
+                }
+            }
+        }
+        else if(handRanking == Ranking.FULL_HOUSE) {
+            if(highCardRanking.size() == 2) {
+                cards.append(highCardRanking.get(0).toString()).append(" full ").append(highCardRanking.get(1).toString());
+            }
+        }
+
+        if(cards.length() != 0)
+            ranking = String.format("%s (%s)", ranking, cards);
+
+        return ranking;
+    }
+
     public enum Ranking {
         HIGH_CARD, PAIR, TWO_PAIRS, TRIPS, STRAIGHT, FLUSH, FULL_HOUSE, QUADS, STRAIGHT_FLUSH;
     }
