@@ -92,4 +92,23 @@ public class Card implements Comparable<Card> {
     public int compareTo(Card card) {
         return card.getRank().getCardRanking() - this.getRank().getCardRanking();
     }
+
+    @Override
+    public String toString() {
+        String output = "";
+        if (suit == CardSuit.CLUB)          output = "c";
+        else if (suit == CardSuit.HEART)    output = "h";
+        else if (suit == CardSuit.DIAMOND)  output = "d";
+        else if (suit == CardSuit.SPADE)    output = "s";
+
+        return this.getRank().toString() + output;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Card)) return false;
+
+        Card card = (Card)obj;
+        return (card.getSuit().ordinal() == this.getSuit().ordinal() && card.getRank().equals(this.getRank()));
+    }
 }
