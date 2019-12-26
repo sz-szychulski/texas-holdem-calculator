@@ -78,6 +78,18 @@ public class EquityCalculator {
         this.maxIterations = maxIterations;
     }
 
+    public boolean isBoardEmpty() {
+        return boardCards.isEmpty();
+    }
+
+    public HandRanking getHandRanking(int handIndex) {
+        return rankings.get(handIndex);
+    }
+
+    public HandEquity getHandEquity(int handIndex) {
+        return equities.get(handIndex);
+    }
+
     public EquityCalculator addHand(Hand hand) {
         this.hands.add(hand);
         return this;
@@ -136,16 +148,22 @@ public class EquityCalculator {
         return this;
     }
 
-    public boolean isBoardEmpty() {
-        return boardCards.isEmpty();
-    }
 
-    public HandRanking getHandRanking(int handIndex) {
-        return rankings.get(handIndex);
-    }
+    //testing method
+    public void printBoardCards() {
+        if(isBoardEmpty()) {
+            System.out.println("Board jest pusty");
+        } else {
+            StringBuilder boardString = new StringBuilder();
 
-    public HandEquity getHandEquity(int handIndex) {
-        return equities.get(handIndex);
+            for(Card card : boardCards) {
+                if(boardString.length() > 0) {
+                    boardString.append(" - ");
+                }
+                boardString.append(String.format("%s", card));
+            }
+            System.out.println(String.format("Bordzik: %s", boardString.toString()));
+        }
     }
 
     public void calculateEquity() throws Exception {
