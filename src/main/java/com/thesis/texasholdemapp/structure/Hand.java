@@ -27,6 +27,14 @@ public class Hand {
         }
     }
 
-    //TODO
-    //prepare multi hand builder from string method
+    @Override
+    public String toString() {
+        String output = "";
+
+        for(Card card : cards) {
+            output = String.format("%s %s", output, card.toString());
+        }
+
+        return output;
+    }
 }
