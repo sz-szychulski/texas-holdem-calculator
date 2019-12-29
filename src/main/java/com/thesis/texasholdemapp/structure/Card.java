@@ -8,9 +8,9 @@ public class Card implements Comparable<Card> {
         CLUB, DIAMOND, HEART, SPADE
     }
 
-    public Card(CardSuit suit, CardRanking ranking) {
-        this.suit = suit;
+    public Card(CardRanking ranking, CardSuit suit) {
         this.ranking = ranking;
+        this.suit = suit;
     }
 
     public CardRanking getRank() {
@@ -85,7 +85,7 @@ public class Card implements Comparable<Card> {
                     throw new Exception(String.format("Wrong card rank: %s", stringRank));
                 }
         }
-        return new Card(cardSuit, cardRanking);
+        return new Card(cardRanking, cardSuit);
     }
 
     @Override

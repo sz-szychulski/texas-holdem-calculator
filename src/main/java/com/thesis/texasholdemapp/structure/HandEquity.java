@@ -28,11 +28,17 @@ public class HandEquity {
         }
     }
 
-    public int getEquity() {
+    public double getEquity() {
         if (possibleHandsCount == 0) {
             return 0;
         }
 
-        return (int)Math.round(bestHandsCount * 100.0 / possibleHandsCount);
+        return bestHandsCount * 100.0 / possibleHandsCount;
+    }
+
+    @Override
+    public String toString() {
+        double equity = this.getEquity();
+        return String.format("~%.2f %%", equity);
     }
 }

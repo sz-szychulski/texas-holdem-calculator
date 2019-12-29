@@ -1,0 +1,14 @@
+.container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.poker-table {
+    position: relative;
+    background-position: center;
+    background-size: 100% 100%;
+    background-image: url("images/poker-table.png");
+    background-repeat: no-repeat;
+    height: 850px;
+    width: 1250px;
+}

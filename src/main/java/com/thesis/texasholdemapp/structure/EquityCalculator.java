@@ -14,16 +14,19 @@ public class EquityCalculator {
     private long seed;
     private long maxIterations;
 
+    private boolean isMonteCarlo = true;
+
     public EquityCalculator() {
         this.reset();
-        this.maxIterations = 100000;
+        this.maxIterations = 200000;
     }
 
     public EquityCalculator reset() {
         this.boardCards = new ArrayList<>();
-        this.hands = new ArrayList<>();
-        this.rankings = new ArrayList<>();
-        this.equities = new ArrayList<>();
+        this.hands      = new ArrayList<>();
+
+        this.rankings   = new ArrayList<>();
+        this.equities   = new ArrayList<>();
 
         seed = System.currentTimeMillis();
 
@@ -91,7 +94,7 @@ public class EquityCalculator {
     }
 
     public EquityCalculator addHand(Hand hand) {
-        this.hands.add(hand);
+        hands.add(hand);
         return this;
     }
 
@@ -104,7 +107,7 @@ public class EquityCalculator {
                 throw new Exception("Duplikacja kart");
             }
 
-            for(int secondHandIndex = 0; secondHandIndex < hands.size(); secondHandIndex++) {
+            for(int secondHandIndex = handIndex + 1; secondHandIndex < hands.size(); secondHandIndex++) {
                 Card card3 = hands.get(secondHandIndex).getCard(0);
                 Card card4 = hands.get(secondHandIndex).getCard(1);
 
@@ -150,9 +153,10 @@ public class EquityCalculator {
 
 
     //testing method
-    public void printBoardCards() {
+    public String printBoardCards() {
         if(isBoardEmpty()) {
             System.out.println("Board jest pusty");
+            return "Board jest pusty";
         } else {
             StringBuilder boardString = new StringBuilder();
 
@@ -163,6 +167,7 @@ public class EquityCalculator {
                 boardString.append(String.format("%s", card));
             }
             System.out.println(String.format("Bordzik: %s", boardString.toString()));
+            return String.format("Bordzik: %s", boardString.toString());
         }
     }
 
@@ -174,7 +179,7 @@ public class EquityCalculator {
         ArrayList<Card> remainingCards = new ArrayList<>();
         for(Card.CardSuit suit : Card.CardSuit.values()) {
             for(CardRanking ranking : CardRanking.values()) {
-                Card newCard = new Card(suit, ranking);
+                Card newCard = new Card(ranking, suit);
                 boolean isUsed = false;
 
                 for(Card card : boardCards) {
@@ -202,13 +207,16 @@ public class EquityCalculator {
         int boardSize = boardCards.size();
         int handsCount = hands.size();
         int remainingCount = remainingCards.size();
+        HandRanking highestRanking = null;
+        int highestRankingIndex;
+
+        //[PREFLOP]
         if(boardSize == 0) {
-            for(int index = 0; index < handsCount; index++) {
+            for (Hand currentHand : hands) {
                 HandEquity handEquity = new HandEquity();
                 equities.add(handEquity);
 
-                Hand hand = hands.get(index);
-                HandRanking handRanking = HandRanking.evaluate(hand.getCard(0), hand.getCard(1));
+                HandRanking handRanking = HandRanking.evaluate(currentHand.getCard(0), currentHand.getCard(1));
                 rankings.add(handRanking);
             }
 
@@ -219,7 +227,7 @@ public class EquityCalculator {
             boardCards.add(null);
 
             Random random = new Random(seed);
-            for(long iteration = 0; iteration > maxIterations; iteration++) {
+            for(long iterations = maxIterations; iterations > 0; iterations--) {
                 int card1Index = random.nextInt(remainingCount);
                 int card2Index, card3Index, card4Index, card5Index;
 
@@ -245,8 +253,8 @@ public class EquityCalculator {
                 boardCards.set(3, remainingCards.get(card4Index));
                 boardCards.set(4, remainingCards.get(card5Index));
 
-                HandRanking highestRanking = null;
-                int highestRankingIndex = -1;
+                highestRanking = null;
+                highestRankingIndex = -1;
 
                 for(int index = 0; index < handsCount; index++) {
                     Hand hand = hands.get(index);
@@ -271,15 +279,16 @@ public class EquityCalculator {
             }
 
             boardCards.clear();
+
+        //[FLOP]
         } else if(boardSize == 3) {
-            for(int index = 0; index < handsCount; index++) {
+            for (Hand currentHand : hands) {
                 HandEquity handEquity = new HandEquity();
                 equities.add(handEquity);
 
-                Hand hand = hands.get(index);
                 HandRanking handRanking = HandRanking.evaluate(
-                        hand.getCard(0),
-                        hand.getCard(1),
+                        currentHand.getCard(0),
+                        currentHand.getCard(1),
                         boardCards.get(0),
                         boardCards.get(1),
                         boardCards.get(2));
@@ -289,17 +298,22 @@ public class EquityCalculator {
             boardCards.add(null);
             boardCards.add(null);
 
-            for(int card1Index = 0; card1Index < remainingCount; card1Index++) {
-                Card card1 = remainingCards.get(card1Index);
+            if(isMonteCarlo) {
+                //Monte Carlo
+                Random random = new Random(seed);
+                for(long iterations = maxIterations; iterations > 0; iterations--) {
+                    int card3Index = random.nextInt(remainingCount);
+                    int card4Index;
 
-                for(int card2Index = card1Index + 1; card2Index < remainingCount; card2Index++) {
-                    Card card2 = remainingCards.get(card2Index);
+                    do {
+                        card4Index = random.nextInt(remainingCount);
+                    } while(card4Index == card3Index);
 
-                    boardCards.set(3, card1);
-                    boardCards.set(4, card2);
+                    boardCards.set(3, remainingCards.get(card3Index));
+                    boardCards.set(4, remainingCards.get(card4Index));
 
-                    HandRanking highestRanking = null;
-                    int highestRankingIndex = -1;
+                    highestRanking = null;
+                    highestRankingIndex = -1;
 
                     for(int handIndex = 0; handIndex < handsCount; handIndex++) {
                         Hand hand = hands.get(handIndex);
@@ -322,19 +336,55 @@ public class EquityCalculator {
                         equities.get(handIndex).addPossibleHand(handIndex == highestRankingIndex);
                     }
                 }
+            } else {
+                //Normal method
+                for(int card1Index = 0; card1Index < remainingCount; card1Index++) {
+                    Card card1 = remainingCards.get(card1Index);
+
+                    for(int card2Index = card1Index + 1; card2Index < remainingCount; card2Index++) {
+                        Card card2 = remainingCards.get(card2Index);
+
+                        boardCards.set(3, card1);
+                        boardCards.set(4, card2);
+
+                        highestRanking = null;
+                        highestRankingIndex = -1;
+
+                        for(int handIndex = 0; handIndex < handsCount; handIndex++) {
+                            Hand hand = hands.get(handIndex);
+                            HandRanking handRanking = HandRanking.evaluate(
+                                    hand.getCard(0),
+                                    hand.getCard(1),
+                                    boardCards.get(0),
+                                    boardCards.get(1),
+                                    boardCards.get(2),
+                                    boardCards.get(3),
+                                    boardCards.get(4));
+
+                            if(highestRanking == null || handRanking.compareTo(highestRanking) >= 0) {
+                                highestRankingIndex = handIndex;
+                                highestRanking = handRanking;
+                            }
+                        }
+
+                        for(int handIndex = 0; handIndex < handsCount; handIndex++) {
+                            equities.get(handIndex).addPossibleHand(handIndex == highestRankingIndex);
+                        }
+                    }
+                }
             }
 
             boardCards.remove(4);
             boardCards.remove(3);
+        //[TURN]
         } else if(boardSize == 4) {
-            for(int index = 0; index < handsCount; index++) {
+            for (Hand currentHand : hands) {
                 HandEquity handEquity = new HandEquity();
                 equities.add(handEquity);
 
-                Hand hand = hands.get(index);
                 HandRanking handRanking = HandRanking.evaluate(
-                        hand.getCard(0),
-                        hand.getCard(1),
+                        currentHand.getCard(0),
+                        currentHand.getCard(1),
                         boardCards.get(0),
                         boardCards.get(1),
                         boardCards.get(2),
@@ -343,37 +393,73 @@ public class EquityCalculator {
             }
 
             boardCards.add(null);
-            for(Card card : remainingCards) {
-                boardCards.set(4, card);
 
-                HandRanking highestRanking = null;
-                int highestRankingIndex = -1;
+            if (isMonteCarlo) {
+                Random random = new Random(seed);
+                for(long iterations = maxIterations; iterations > 0; iterations--) {
+                    int card4Index = random.nextInt(remainingCount);
 
-                for(int index = 0; index < handsCount; index++) {
-                    Hand hand = hands.get(index);
-                    HandRanking handRanking = HandRanking.evaluate(
-                            hand.getCard(0),
-                            hand.getCard(1),
-                            boardCards.get(0),
-                            boardCards.get(1),
-                            boardCards.get(2),
-                            boardCards.get(3),
-                            boardCards.get(4));
+                    boardCards.set(4, remainingCards.get(card4Index));
+                    highestRanking = null;
+                    highestRankingIndex = -1;
 
-                    if(highestRanking == null || handRanking.compareTo(highestRanking) >= 0) {
-                        highestRankingIndex = index;
-                        highestRanking = handRanking;
+                    for(int handIndex = 0; handIndex < handsCount; handIndex++) {
+                        Hand hand = hands.get(handIndex);
+                        HandRanking handRanking = HandRanking.evaluate(
+                                hand.getCard(0),
+                                hand.getCard(1),
+                                boardCards.get(0),
+                                boardCards.get(1),
+                                boardCards.get(2),
+                                boardCards.get(3),
+                                boardCards.get(4));
+
+                        if(highestRanking == null || handRanking.compareTo(highestRanking) >= 0) {
+                            highestRankingIndex = handIndex;
+                            highestRanking = handRanking;
+                        }
+                    }
+
+                    for(int handIndex = 0; handIndex < handsCount; handIndex++) {
+                        equities.get(handIndex).addPossibleHand(handIndex == highestRankingIndex);
                     }
                 }
+            } else {
+                for(Card card : remainingCards) {
+                    boardCards.set(4, card);
 
-                for(int index = 0; index < handsCount; index++) {
-                    equities.get(index).addPossibleHand(index == highestRankingIndex);
+                    highestRanking = null;
+                    highestRankingIndex = -1;
+
+                    for(int index = 0; index < handsCount; index++) {
+                        Hand hand = hands.get(index);
+                        HandRanking handRanking = HandRanking.evaluate(
+                                hand.getCard(0),
+                                hand.getCard(1),
+                                boardCards.get(0),
+                                boardCards.get(1),
+                                boardCards.get(2),
+                                boardCards.get(3),
+                                boardCards.get(4));
+
+                        if(highestRanking == null || handRanking.compareTo(highestRanking) >= 0) {
+                            highestRankingIndex = index;
+                            highestRanking = handRanking;
+                        }
+                    }
+
+                    for(int index = 0; index < handsCount; index++) {
+                        equities.get(index).addPossibleHand(index == highestRankingIndex);
+                    }
                 }
             }
+
             boardCards.remove(4);
+
+        //[RIVER]
         } else if(boardSize == 5) {
-            HandRanking highestRanking = null;
-            int highestRankingIndex = -1;
+            highestRanking = null;
+            highestRankingIndex = -1;
 
             for(int index = 0; index < handsCount; index++) {
                 Hand hand = hands.get(index);

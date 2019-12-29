@@ -4,7 +4,7 @@ import java.util.*;
 
 public class HandRanking implements Comparable<HandRanking>{
     private HandRanking.Ranking handRanking;
-    private ArrayList<CardRanking> highCardRanking;
+    private ArrayList<CardRanking> highCardRanking = new ArrayList<>();
 
     public HandRanking(Ranking handRanking) {
         this.handRanking = handRanking;
@@ -280,7 +280,7 @@ public class HandRanking implements Comparable<HandRanking>{
             for(int cardIndex = 0; cardIndex < inputCardsCount; cardIndex++) {
                 for(int secondCardIndex = cardIndex + 1; secondCardIndex < inputCardsCount; secondCardIndex++) {
                     for(int thirdCardIndex = secondCardIndex + 1; thirdCardIndex < inputCardsCount; thirdCardIndex++) {
-                        if(inputCards[cardIndex].getRank().equals(inputCards[cardIndex].getRank()) &&
+                        if(inputCards[cardIndex].getRank().equals(inputCards[secondCardIndex].getRank()) &&
                                 inputCards[cardIndex].getRank().equals(inputCards[thirdCardIndex].getRank()) &&
                                 !tripRanks.contains(inputCards[cardIndex].getRank())) {
 

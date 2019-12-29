@@ -7,7 +7,6 @@ public class ErrorHandler {
     public ArrayList<String> getErrorList() {
         return errorList;
     }
-
     public void setErrorList(ArrayList<String> errorList) {
         this.errorList = errorList;
     }

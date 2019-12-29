@@ -25,28 +25,34 @@ public class CardRanking implements Comparable<CardRanking> {
         this.cardRanking = cardRanking;
     }
 
-    public String changeToString() {
-        String stringCardRanking;
-        switch (cardRanking) {
-            case 10:
-                stringCardRanking = "T";
-                break;
-            case 11:
-                stringCardRanking = "J";
-                break;
-            case 12:
-                stringCardRanking = "Q";
-                break;
-            case 13:
-                stringCardRanking = "K";
-                break;
-            case 14:
-                stringCardRanking = "A";
-                break;
-            default:
-                stringCardRanking = String.valueOf(cardRanking);
-        }
-        return stringCardRanking;
+    @Override
+    public String toString() {
+        String ranking;
+
+        if(cardRanking == 10)				ranking = "T";
+        else if(cardRanking == 11)		    ranking = "J";
+        else if(cardRanking == 12)		    ranking = "Q";
+        else if(cardRanking == 13)		    ranking = "K";
+        else if(cardRanking == 14)		    ranking = "A";
+        else							    ranking = String.valueOf(cardRanking);
+
+        return ranking;
+    }
+
+    public String toStringPlural() {
+        if(cardRanking == 2)				return "twos";
+        else if(cardRanking == 3)			return "threes";
+        else if(cardRanking == 4)			return "fours";
+        else if(cardRanking == 5)			return "fives";
+        else if(cardRanking == 6)			return "sixes";
+        else if(cardRanking == 7)			return "sevens";
+        else if(cardRanking == 8)			return "eights";
+        else if(cardRanking == 9)			return "nines";
+        else if(cardRanking == 10)		    return "tens";
+        else if(cardRanking == 11)		    return "jacks";
+        else if(cardRanking == 12)		    return "queens";
+        else if(cardRanking == 13)		    return "kings";
+        else 							    return "aces";
     }
 
     public static CardRanking[] values() {
@@ -72,5 +78,13 @@ public class CardRanking implements Comparable<CardRanking> {
     @Override
     public int compareTo(CardRanking cardRanking) {
         return this.getCardRanking() - cardRanking.getCardRanking();
+    }
+
+    @Override
+    public boolean equals(Object obj){
+        if (!(obj instanceof CardRanking)) return false;
+
+        CardRanking otherRank = (CardRanking)obj;
+        return (otherRank.getCardRanking() == this.getCardRanking());
     }
 }

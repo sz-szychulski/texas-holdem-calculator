@@ -8,13 +8,19 @@ import com.thesis.texasholdemapp.structure.HandRanking;
 import java.util.ArrayList;
 
 public class EquityHandler {
-    private boolean isBoard;
-    private String boardCards;
+    private boolean isBoard = false;
+    private String boardCards = "";
 
-    private ArrayList<String> handsString;
-    private ArrayList<Hand> hands;
+    private ArrayList<String> handsString = new ArrayList<>();
+    private ArrayList<Hand> hands = new ArrayList<>();
 
-    EquityCalculator equityCalculator = new EquityCalculator();
+    private ArrayList<HandRanking> handRankings = new ArrayList<>();
+    private ArrayList<HandEquity> handEquities = new ArrayList<>();
+
+    private EquityCalculator equityCalculator = new EquityCalculator();
+
+    public EquityHandler() {
+    }
 
     public EquityHandler(boolean isBoard, String boardCards, ArrayList<String> handsString, ArrayList<Hand> hands) {
         this.isBoard = isBoard;
@@ -23,40 +29,88 @@ public class EquityHandler {
         this.hands = hands;
     }
 
+    public boolean isBoard() {
+        return isBoard;
+    }
 
-    public void calculateEquity() throws Exception {
-        if (!boardCards.isEmpty()) {
-            equityCalculator.setBoardFromString(boardCards);
-        }
+    public void setBoard(boolean board) {
+        isBoard = board;
+    }
 
-        for (String handString : handsString) {
-            Hand hand = Hand.singleHandFromString(handString);
-            hands.add(hand);
-            equityCalculator.addHand(hand);
-        }
+    public String getBoardCards() {
+        return boardCards;
+    }
 
-        long startTime = System.currentTimeMillis();
-        equityCalculator.calculateEquity();
-        long elapsedTime = System.currentTimeMillis() - startTime;
+    public void setBoardCards(String boardCards) {
+        this.boardCards = boardCards;
+    }
+
+    public ArrayList<String> getHandsString() {
+        return handsString;
+    }
+
+    public void setHandsString(ArrayList<String> handsString) {
+        this.handsString = handsString;
+    }
+
+    public ArrayList<Hand> getHands() {
+        return hands;
+    }
+
+    public void setHands(ArrayList<Hand> hands) {
+        this.hands = hands;
+    }
+
+    public ArrayList<HandRanking> getHandRankings() {
+        return handRankings;
+    }
+
+    public void setHandRankings(ArrayList<HandRanking> handRankings) {
+        this.handRankings = handRankings;
+    }
+
+    public ArrayList<HandEquity> getHandEquities() {
+        return handEquities;
+    }
+
+    public void setHandEquities(ArrayList<HandEquity> handEquities) {
+        this.handEquities = handEquities;
+    }
+
+    public void calculateEquity() {
+        try {
+            if (!boardCards.isEmpty()) {
+                equityCalculator.setBoardFromString(boardCards);
+            }
+
+            for (String handString : handsString) {
+                Hand hand = Hand.singleHandFromString(handString);
+                hands.add(hand);
+                equityCalculator.addHand(hand);
+            }
+
+            long startTime = System.currentTimeMillis();
+            equityCalculator.calculateEquity();
+            long elapsedTime = System.currentTimeMillis() - startTime;
 
 
-        equityCalculator.printBoardCards();
+            equityCalculator.printBoardCards();
 
-        for(int index = 0; index < hands.size(); index++) {
-            HandRanking handRanking = equityCalculator.getHandRanking(index);
-            HandEquity handEquity = equityCalculator.getHandEquity(index);
+            for(int index = 0; index < hands.size(); index++) {
+                HandRanking handRanking = equityCalculator.getHandRanking(index);
+                HandEquity handEquity = equityCalculator.getHandEquity(index);
 
-            String preprend = equityCalculator.isBoardEmpty() ? "~" : "";
+                handRankings.add(handRanking);
+                handEquities.add(handEquity);
 
-            System.out.println(String.format("Gracz %d: %s - %s --- %s%s", 1 + index, hands.get(index), handRanking, preprend, handEquity));
-        }
-
-        if (equityCalculator.isBoardEmpty()) {
+                System.out.println(String.format("Gracz %d: %s - %s --- %s", 1 + index, hands.get(index), handRanking, handEquity));
+            }
             float elapsedSeconds = elapsedTime / 1000.0f;
 
             System.out.println(String.format("Zasymulowane %d boardow w %.1f sekund", equityCalculator.getMaxIterations(), elapsedSeconds));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
     }
 
 
