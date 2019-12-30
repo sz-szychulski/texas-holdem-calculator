@@ -1,7 +1,9 @@
 package com.thesis.texasholdemapp.structure;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.Random;
 
 public class EquityCalculator {
@@ -12,21 +14,20 @@ public class EquityCalculator {
     private ArrayList<HandEquity> equities;
 
     private long seed;
-    private long maxIterations;
+    private long maxIterations = 200000;
 
     private boolean isMonteCarlo = true;
 
     public EquityCalculator() {
         this.reset();
-        this.maxIterations = 200000;
     }
 
     public EquityCalculator reset() {
-        this.boardCards = new ArrayList<>();
-        this.hands      = new ArrayList<>();
+        this.boardCards     = new ArrayList<>();
+        this.hands          = new ArrayList<>();
 
-        this.rankings   = new ArrayList<>();
-        this.equities   = new ArrayList<>();
+        this.rankings       = new ArrayList<>();
+        this.equities       = new ArrayList<>();
 
         seed = System.currentTimeMillis();
 
@@ -207,8 +208,11 @@ public class EquityCalculator {
         int boardSize = boardCards.size();
         int handsCount = hands.size();
         int remainingCount = remainingCards.size();
-        HandRanking highestRanking = null;
+
+        HandRanking highestRanking;
         int highestRankingIndex;
+
+        LinkedHashSet<Integer> splitIndexes = new LinkedHashSet<>();
 
         //[PREFLOP]
         if(boardSize == 0) {
@@ -255,9 +259,10 @@ public class EquityCalculator {
 
                 highestRanking = null;
                 highestRankingIndex = -1;
+                splitIndexes.clear();
 
-                for(int index = 0; index < handsCount; index++) {
-                    Hand hand = hands.get(index);
+                for(int handIndex = 0; handIndex < handsCount; handIndex++) {
+                    Hand hand = hands.get(handIndex);
                     HandRanking handRanking = HandRanking.evaluate(
                             hand.getCard(0),
                             hand.getCard(1),
@@ -267,14 +272,25 @@ public class EquityCalculator {
                             boardCards.get(3),
                             boardCards.get(4));
 
-                    if(highestRanking == null || handRanking.compareTo(highestRanking) >= 0) {
-                        highestRankingIndex = index;
+                    if(highestRanking == null || handRanking.compareTo(highestRanking) > 0) {
+                        highestRankingIndex = handIndex;
                         highestRanking = handRanking;
+                    } else if(handRanking.compareTo(highestRanking) == 0) {
+                        splitIndexes.add(highestRankingIndex);
+                        splitIndexes.add(handIndex);
                     }
                 }
 
-                for(int index = 0; index < handsCount; index++) {
-                    equities.get(index).addPossibleHand(index == highestRankingIndex);
+                for(int handIndex = 0; handIndex < handsCount; handIndex++) {
+                    if (splitIndexes.isEmpty()) {
+                        equities.get(handIndex).addPossibleHand(handIndex == highestRankingIndex);
+                    } else {
+                        for (Integer index : splitIndexes) {
+                            equities.get(index).addSplitHands(true);
+                        }
+                        splitIndexes.clear();
+                        handIndex = handsCount + 1;
+                    }
                 }
             }
 
@@ -314,6 +330,7 @@ public class EquityCalculator {
 
                     highestRanking = null;
                     highestRankingIndex = -1;
+                    splitIndexes.clear();
 
                     for(int handIndex = 0; handIndex < handsCount; handIndex++) {
                         Hand hand = hands.get(handIndex);
@@ -326,14 +343,25 @@ public class EquityCalculator {
                                 boardCards.get(3),
                                 boardCards.get(4));
 
-                        if(highestRanking == null || handRanking.compareTo(highestRanking) >= 0) {
+                        if(highestRanking == null || handRanking.compareTo(highestRanking) > 0) {
                             highestRankingIndex = handIndex;
                             highestRanking = handRanking;
+                        } else if(handRanking.compareTo(highestRanking) == 0) {
+                            splitIndexes.add(highestRankingIndex);
+                            splitIndexes.add(handIndex);
                         }
                     }
 
                     for(int handIndex = 0; handIndex < handsCount; handIndex++) {
-                        equities.get(handIndex).addPossibleHand(handIndex == highestRankingIndex);
+                        if (splitIndexes.isEmpty()) {
+                            equities.get(handIndex).addPossibleHand(handIndex == highestRankingIndex);
+                        } else {
+                            for (Integer index : splitIndexes) {
+                                equities.get(index).addSplitHands(true);
+                            }
+                            splitIndexes.clear();
+                            handIndex = handsCount + 1;
+                        }
                     }
                 }
             } else {
@@ -349,6 +377,7 @@ public class EquityCalculator {
 
                         highestRanking = null;
                         highestRankingIndex = -1;
+                        splitIndexes.clear();
 
                         for(int handIndex = 0; handIndex < handsCount; handIndex++) {
                             Hand hand = hands.get(handIndex);
@@ -361,14 +390,25 @@ public class EquityCalculator {
                                     boardCards.get(3),
                                     boardCards.get(4));
 
-                            if(highestRanking == null || handRanking.compareTo(highestRanking) >= 0) {
+                            if(highestRanking == null || handRanking.compareTo(highestRanking) > 0) {
                                 highestRankingIndex = handIndex;
                                 highestRanking = handRanking;
+                            } else if(handRanking.compareTo(highestRanking) == 0) {
+                                splitIndexes.add(highestRankingIndex);
+                                splitIndexes.add(handIndex);
                             }
                         }
 
                         for(int handIndex = 0; handIndex < handsCount; handIndex++) {
-                            equities.get(handIndex).addPossibleHand(handIndex == highestRankingIndex);
+                            if (splitIndexes.isEmpty()) {
+                                equities.get(handIndex).addPossibleHand(handIndex == highestRankingIndex);
+                            } else {
+                                for (Integer index : splitIndexes) {
+                                    equities.get(index).addSplitHands(true);
+                                }
+                                splitIndexes.clear();
+                                handIndex = handsCount + 1;
+                            }
                         }
                     }
                 }
@@ -376,6 +416,7 @@ public class EquityCalculator {
 
             boardCards.remove(4);
             boardCards.remove(3);
+
         //[TURN]
         } else if(boardSize == 4) {
             for (Hand currentHand : hands) {
@@ -400,8 +441,10 @@ public class EquityCalculator {
                     int card4Index = random.nextInt(remainingCount);
 
                     boardCards.set(4, remainingCards.get(card4Index));
+
                     highestRanking = null;
                     highestRankingIndex = -1;
+                    splitIndexes.clear();
 
                     for(int handIndex = 0; handIndex < handsCount; handIndex++) {
                         Hand hand = hands.get(handIndex);
@@ -414,14 +457,25 @@ public class EquityCalculator {
                                 boardCards.get(3),
                                 boardCards.get(4));
 
-                        if(highestRanking == null || handRanking.compareTo(highestRanking) >= 0) {
+                        if(highestRanking == null || handRanking.compareTo(highestRanking) > 0) {
                             highestRankingIndex = handIndex;
                             highestRanking = handRanking;
+                        } else if(handRanking.compareTo(highestRanking) == 0) {
+                            splitIndexes.add(highestRankingIndex);
+                            splitIndexes.add(handIndex);
                         }
                     }
 
                     for(int handIndex = 0; handIndex < handsCount; handIndex++) {
-                        equities.get(handIndex).addPossibleHand(handIndex == highestRankingIndex);
+                        if (splitIndexes.isEmpty()) {
+                            equities.get(handIndex).addPossibleHand(handIndex == highestRankingIndex);
+                        } else {
+                            for (Integer index : splitIndexes) {
+                                equities.get(index).addSplitHands(true);
+                            }
+                            splitIndexes.clear();
+                            handIndex = handsCount + 1;
+                        }
                     }
                 }
             } else {
@@ -430,9 +484,10 @@ public class EquityCalculator {
 
                     highestRanking = null;
                     highestRankingIndex = -1;
+                    splitIndexes.clear();
 
-                    for(int index = 0; index < handsCount; index++) {
-                        Hand hand = hands.get(index);
+                    for(int handIndex = 0; handIndex < handsCount; handIndex++) {
+                        Hand hand = hands.get(handIndex);
                         HandRanking handRanking = HandRanking.evaluate(
                                 hand.getCard(0),
                                 hand.getCard(1),
@@ -442,14 +497,25 @@ public class EquityCalculator {
                                 boardCards.get(3),
                                 boardCards.get(4));
 
-                        if(highestRanking == null || handRanking.compareTo(highestRanking) >= 0) {
-                            highestRankingIndex = index;
+                        if(highestRanking == null || handRanking.compareTo(highestRanking) > 0) {
+                            highestRankingIndex = handIndex;
                             highestRanking = handRanking;
+                        } else if(handRanking.compareTo(highestRanking) == 0) {
+                            splitIndexes.add(highestRankingIndex);
+                            splitIndexes.add(handIndex);
                         }
                     }
 
-                    for(int index = 0; index < handsCount; index++) {
-                        equities.get(index).addPossibleHand(index == highestRankingIndex);
+                    for(int handIndex = 0; handIndex < handsCount; handIndex++) {
+                        if (splitIndexes.isEmpty()) {
+                            equities.get(handIndex).addPossibleHand(handIndex == highestRankingIndex);
+                        } else {
+                            for (Integer index : splitIndexes) {
+                                equities.get(index).addSplitHands(true);
+                            }
+                            splitIndexes.clear();
+                            handIndex = handsCount + 1;
+                        }
                     }
                 }
             }
@@ -460,9 +526,10 @@ public class EquityCalculator {
         } else if(boardSize == 5) {
             highestRanking = null;
             highestRankingIndex = -1;
+            splitIndexes.clear();
 
-            for(int index = 0; index < handsCount; index++) {
-                Hand hand = hands.get(index);
+            for(int handIndex = 0; handIndex < handsCount; handIndex++) {
+                Hand hand = hands.get(handIndex);
                 HandRanking handRanking = HandRanking.evaluate(
                         hand.getCard(0),
                         hand.getCard(1),
@@ -472,18 +539,30 @@ public class EquityCalculator {
                         boardCards.get(3),
                         boardCards.get(4));
 
-                if(highestRanking == null || handRanking.compareTo(highestRanking) >= 0) {
-                    highestRankingIndex = index;
+                if(highestRanking == null || handRanking.compareTo(highestRanking) > 0) {
+                    highestRankingIndex = handIndex;
                     highestRanking = handRanking;
+                } else if(handRanking.compareTo(highestRanking) == 0) {
+                    splitIndexes.add(highestRankingIndex);
+                    splitIndexes.add(handIndex);
                 }
 
                 rankings.add(handRanking);
             }
 
 
-            for(int index = 0; index < handsCount; index++) {
+            for(int handIndex = 0; handIndex < handsCount; handIndex++) {
                 HandEquity handEquity = new HandEquity();
-                handEquity.addPossibleHand(index == highestRankingIndex);
+
+                if (splitIndexes.isEmpty()) {
+                    equities.get(handIndex).addPossibleHand(handIndex == highestRankingIndex);
+                } else {
+                    for (Integer index : splitIndexes) {
+                        equities.get(index).addSplitHands(true);
+                    }
+                    splitIndexes.clear();
+                    handIndex = handsCount + 1;
+                }
 
                 equities.add(handEquity);
             }

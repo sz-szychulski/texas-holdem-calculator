@@ -16,6 +16,7 @@ public class EquityHandler {
 
     private ArrayList<HandRanking> handRankings = new ArrayList<>();
     private ArrayList<HandEquity> handEquities = new ArrayList<>();
+    private ArrayList<HandEquity> splitEquities = new ArrayList<>();
 
     private EquityCalculator equityCalculator = new EquityCalculator();
 
@@ -103,7 +104,13 @@ public class EquityHandler {
                 handRankings.add(handRanking);
                 handEquities.add(handEquity);
 
-                System.out.println(String.format("Gracz %d: %s - %s --- %s", 1 + index, hands.get(index), handRanking, handEquity));
+                double totalEquity = handEquity.getEquity() + (handEquity.getSplitEquity() / hands.size());
+                double winEquity = handEquity.getEquity();
+                double splitEquity = handEquity.getSplitEquity() / hands.size();
+
+                System.out.println(String.format("Gracz %d: %s - %s --- ~%.2f %%", 1 + index, hands.get(index), handRanking, totalEquity));
+                System.out.println(String.format("Wygrana: ~%.2f %%", winEquity));
+                System.out.println(String.format("Split pot: ~%.2f %%", splitEquity));
             }
             float elapsedSeconds = elapsedTime / 1000.0f;
 
