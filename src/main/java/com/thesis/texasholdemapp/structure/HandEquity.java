@@ -21,6 +21,14 @@ public class HandEquity {
         this.bestHandsCount = bestHandsCount;
     }
 
+    public int getSplitHandsCount() {
+        return splitHandsCount;
+    }
+
+    public void setSplitHandsCount(int splitHandsCount) {
+        this.splitHandsCount = splitHandsCount;
+    }
+
     public void addPossibleHand(boolean isBestHand) {
         possibleHandsCount++;
 

@@ -16,7 +16,6 @@ public class EquityHandler {
 
     private ArrayList<HandRanking> handRankings = new ArrayList<>();
     private ArrayList<HandEquity> handEquities = new ArrayList<>();
-    private ArrayList<HandEquity> splitEquities = new ArrayList<>();
 
     private EquityCalculator equityCalculator = new EquityCalculator();
 
@@ -97,24 +96,37 @@ public class EquityHandler {
 
             equityCalculator.printBoardCards();
 
+            float minSpliters = hands.size();
             for(int index = 0; index < hands.size(); index++) {
                 HandRanking handRanking = equityCalculator.getHandRanking(index);
                 HandEquity handEquity = equityCalculator.getHandEquity(index);
 
+                float splitCounter = equityCalculator.getSplitCounter();
+                float averageSpliters = hands.size();
+
+                if (splitCounter != 0) {
+                    averageSpliters = (splitCounter / handEquity.getSplitHandsCount());
+                }
+
+                if(averageSpliters < minSpliters) {
+                    minSpliters = averageSpliters;
+                }
+
                 handRankings.add(handRanking);
                 handEquities.add(handEquity);
 
-                double totalEquity = handEquity.getEquity() + (handEquity.getSplitEquity() / hands.size());
+                double totalEquity = handEquity.getEquity() + (handEquity.getSplitEquity() / minSpliters);
                 double winEquity = handEquity.getEquity();
-                double splitEquity = handEquity.getSplitEquity() / hands.size();
+                double splitEquity = handEquity.getSplitEquity() / minSpliters;
 
                 System.out.println(String.format("Gracz %d: %s - %s --- ~%.2f %%", 1 + index, hands.get(index), handRanking, totalEquity));
                 System.out.println(String.format("Wygrana: ~%.2f %%", winEquity));
                 System.out.println(String.format("Split pot: ~%.2f %%", splitEquity));
             }
-            float elapsedSeconds = elapsedTime / 1000.0f;
 
+            float elapsedSeconds = elapsedTime / 1000.0f;
             System.out.println(String.format("Zasymulowane %d boardow w %.1f sekund", equityCalculator.getMaxIterations(), elapsedSeconds));
+
         } catch (Exception e) {
             e.printStackTrace();
         }

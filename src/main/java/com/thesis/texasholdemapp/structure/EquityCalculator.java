@@ -16,6 +16,8 @@ public class EquityCalculator {
     private long seed;
     private long maxIterations = 200000;
 
+    private int splitCounter = 0;
+
     private boolean isMonteCarlo = true;
 
     public EquityCalculator() {
@@ -84,6 +86,14 @@ public class EquityCalculator {
 
     public boolean isBoardEmpty() {
         return boardCards.isEmpty();
+    }
+
+    public int getSplitCounter() {
+        return splitCounter;
+    }
+
+    public void setSplitCounter(int splitCounter) {
+        this.splitCounter = splitCounter;
     }
 
     public HandRanking getHandRanking(int handIndex) {
@@ -281,15 +291,18 @@ public class EquityCalculator {
                     }
                 }
 
+                splitCounter = splitCounter + splitIndexes.size();
+
                 for(int handIndex = 0; handIndex < handsCount; handIndex++) {
                     if (splitIndexes.isEmpty()) {
                         equities.get(handIndex).addPossibleHand(handIndex == highestRankingIndex);
                     } else {
-                        for (Integer index : splitIndexes) {
-                            equities.get(index).addSplitHands(true);
+                        if (splitIndexes.contains(handIndex)) {
+                            equities.get(handIndex).addSplitHands(true);
+                            splitIndexes.remove(handIndex);
+                        } else {
+                            equities.get(handIndex).addPossibleHand(handIndex == highestRankingIndex);
                         }
-                        splitIndexes.clear();
-                        handIndex = handsCount + 1;
                     }
                 }
             }
@@ -352,15 +365,18 @@ public class EquityCalculator {
                         }
                     }
 
+                    splitCounter = splitCounter + splitIndexes.size();
+
                     for(int handIndex = 0; handIndex < handsCount; handIndex++) {
                         if (splitIndexes.isEmpty()) {
                             equities.get(handIndex).addPossibleHand(handIndex == highestRankingIndex);
                         } else {
-                            for (Integer index : splitIndexes) {
-                                equities.get(index).addSplitHands(true);
+                            if (splitIndexes.contains(handIndex)) {
+                                equities.get(handIndex).addSplitHands(true);
+                                splitIndexes.remove(handIndex);
+                            } else {
+                                equities.get(handIndex).addPossibleHand(handIndex == highestRankingIndex);
                             }
-                            splitIndexes.clear();
-                            handIndex = handsCount + 1;
                         }
                     }
                 }
@@ -399,15 +415,18 @@ public class EquityCalculator {
                             }
                         }
 
+                        splitCounter = splitCounter + splitIndexes.size();
+
                         for(int handIndex = 0; handIndex < handsCount; handIndex++) {
                             if (splitIndexes.isEmpty()) {
                                 equities.get(handIndex).addPossibleHand(handIndex == highestRankingIndex);
                             } else {
-                                for (Integer index : splitIndexes) {
-                                    equities.get(index).addSplitHands(true);
+                                if (splitIndexes.contains(handIndex)) {
+                                    equities.get(handIndex).addSplitHands(true);
+                                    splitIndexes.remove(handIndex);
+                                } else {
+                                    equities.get(handIndex).addPossibleHand(handIndex == highestRankingIndex);
                                 }
-                                splitIndexes.clear();
-                                handIndex = handsCount + 1;
                             }
                         }
                     }
@@ -466,15 +485,18 @@ public class EquityCalculator {
                         }
                     }
 
+                    splitCounter = splitCounter + splitIndexes.size();
+
                     for(int handIndex = 0; handIndex < handsCount; handIndex++) {
                         if (splitIndexes.isEmpty()) {
                             equities.get(handIndex).addPossibleHand(handIndex == highestRankingIndex);
                         } else {
-                            for (Integer index : splitIndexes) {
-                                equities.get(index).addSplitHands(true);
+                            if (splitIndexes.contains(handIndex)) {
+                                equities.get(handIndex).addSplitHands(true);
+                                splitIndexes.remove(handIndex);
+                            } else {
+                                equities.get(handIndex).addPossibleHand(handIndex == highestRankingIndex);
                             }
-                            splitIndexes.clear();
-                            handIndex = handsCount + 1;
                         }
                     }
                 }
@@ -506,15 +528,18 @@ public class EquityCalculator {
                         }
                     }
 
+                    splitCounter = splitCounter + splitIndexes.size();
+
                     for(int handIndex = 0; handIndex < handsCount; handIndex++) {
                         if (splitIndexes.isEmpty()) {
                             equities.get(handIndex).addPossibleHand(handIndex == highestRankingIndex);
                         } else {
-                            for (Integer index : splitIndexes) {
-                                equities.get(index).addSplitHands(true);
+                            if (splitIndexes.contains(handIndex)) {
+                                equities.get(handIndex).addSplitHands(true);
+                                splitIndexes.remove(handIndex);
+                            } else {
+                                equities.get(handIndex).addPossibleHand(handIndex == highestRankingIndex);
                             }
-                            splitIndexes.clear();
-                            handIndex = handsCount + 1;
                         }
                     }
                 }
@@ -558,7 +583,7 @@ public class EquityCalculator {
                     equities.get(handIndex).addPossibleHand(handIndex == highestRankingIndex);
                 } else {
                     for (Integer index : splitIndexes) {
-                        equities.get(index).addSplitHands(true);
+//                        equities.get(index).addSplitHands(true);
                     }
                     splitIndexes.clear();
                     handIndex = handsCount + 1;
