@@ -16,7 +16,7 @@
 
 </head>
 <body>
-    <div class="container">
+    <div class="content-container">
         <h1>Aplikacja wspierająca podejmowanie decyzji w grze Texas Hold'em</h1>
         <h2>Gracze:</h2>
         <form method="post" action="/calculate">
@@ -46,6 +46,22 @@
                 <input type="text" name="player6" id="player6"/>
             </div>
             <div>
+                <label for="player7">Gracz 7: </label>
+                <input type="text" name="player7" id="player7"/>
+            </div>
+            <div>
+                <label for="player8">Gracz 8: </label>
+                <input type="text" name="player8" id="player8"/>
+            </div>
+            <div>
+                <label for="player9">Gracz 9: </label>
+                <input type="text" name="player9" id="player9"/>
+            </div>
+            <div>
+                <label for="player10">Gracz 10: </label>
+                <input type="text" name="player10" id="player10"/>
+            </div>
+            <div>
                 <label for="board">Karty wspólne: </label>
                 <input type="text" name="board" id="board"/>
             </div>
@@ -54,8 +70,34 @@
             </div>
         </form>
         <hr />
-        <h1>Wynik:</h1>
 
+        <div class="poker-table">
+            <div class="player1">
+                <h5>Gracz 1 </h5><br/><br/>
+                Układ: <br/>
+                Equity: <br/>
+                Wygrana: <br/>
+                Podział: <br/>
+            </div>
+            <div class="player2">
+            </div>
+            <div class="player3">
+            </div>
+            <div class="player4">
+            </div>
+            <div class="player5">
+            </div>
+            <div class="player6">
+            </div>
+            <div class="player7">
+            </div>
+            <div class="player8">
+            </div>
+            <div class="player9">
+            </div>
+            <div class="player10">
+            </div>
+        </div>
     </div>
 </body>
 </html>

@@ -108,7 +108,7 @@ public class HandRanking implements Comparable<HandRanking>{
                     }
 
                     if(compareRanks != 1) {
-                        straightCards = new ArrayList<CardRanking>();
+                        straightCards = new ArrayList<>();
                         straightCount = 0;
                     }
 
