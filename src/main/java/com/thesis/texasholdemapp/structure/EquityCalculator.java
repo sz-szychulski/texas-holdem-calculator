@@ -551,7 +551,6 @@ public class EquityCalculator {
         } else if(boardSize == 5) {
             highestRanking = null;
             highestRankingIndex = -1;
-            splitIndexes.clear();
 
             for(int handIndex = 0; handIndex < handsCount; handIndex++) {
                 Hand hand = hands.get(handIndex);
@@ -578,18 +577,18 @@ public class EquityCalculator {
 
             for(int handIndex = 0; handIndex < handsCount; handIndex++) {
                 HandEquity handEquity = new HandEquity();
+                equities.add(handEquity);
 
                 if (splitIndexes.isEmpty()) {
                     equities.get(handIndex).addPossibleHand(handIndex == highestRankingIndex);
                 } else {
-                    for (Integer index : splitIndexes) {
-//                        equities.get(index).addSplitHands(true);
+                    if (splitIndexes.contains(handIndex)) {
+                        equities.get(handIndex).addSplitHands(true);
+                        splitIndexes.remove(handIndex);
+                    } else {
+                        equities.get(handIndex).addPossibleHand(handIndex == highestRankingIndex);
                     }
-                    splitIndexes.clear();
-                    handIndex = handsCount + 1;
                 }
-
-                equities.add(handEquity);
             }
         }
     }

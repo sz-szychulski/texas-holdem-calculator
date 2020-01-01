@@ -233,6 +233,7 @@ public class HandRanking implements Comparable<HandRanking>{
                 straightCards.add(cardRanking);
 
                 for(int secondCardIndex = cardIndex + 1; secondCardIndex < cards.size(); secondCardIndex++) {
+
                     CardRanking secondCardRanking = cards.get(secondCardIndex).getRank();
                     int compareTo = cardRanking.compareTo(secondCardRanking);
 
@@ -264,6 +265,22 @@ public class HandRanking implements Comparable<HandRanking>{
 
                         handRanking = new HandRanking(Ranking.STRAIGHT);
                         for(CardRanking currentCardRanking : straightCards) {
+                            handRanking.addHighCard(currentCardRanking);
+                        }
+                        handRanking.addHighCard(highestCard.getRank());
+                        return handRanking;
+                    }
+                }
+
+                if (straightCount == 3 && (cardIndex + 1) == (inputCardsCount - 4)) {
+                    Card lowestCard = cards.get(cardIndex + 4);
+                    Card highestCard = cards.get(0);
+
+                    if (highestCard.getRank().getCardRanking() == CardRanking.ACE &&
+                            lowestCard.getRank().getCardRanking() == CardRanking.TWO) {
+
+                        handRanking = new HandRanking(Ranking.STRAIGHT);
+                        for (CardRanking currentCardRanking : straightCards) {
                             handRanking.addHighCard(currentCardRanking);
                         }
                         handRanking.addHighCard(highestCard.getRank());
