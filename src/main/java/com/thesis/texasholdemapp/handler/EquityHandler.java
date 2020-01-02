@@ -1,9 +1,6 @@
 package com.thesis.texasholdemapp.handler;
 
-import com.thesis.texasholdemapp.structure.EquityCalculator;
-import com.thesis.texasholdemapp.structure.Hand;
-import com.thesis.texasholdemapp.structure.HandEquity;
-import com.thesis.texasholdemapp.structure.HandRanking;
+import com.thesis.texasholdemapp.structure.*;
 
 import java.util.ArrayList;
 
@@ -16,6 +13,12 @@ public class EquityHandler {
 
     private ArrayList<HandRanking> handRankings = new ArrayList<>();
     private ArrayList<HandEquity> handEquities = new ArrayList<>();
+
+    private ArrayList<Double> totalEquitiesList = new ArrayList<>();
+    private ArrayList<Double> totalWinEquitiesList = new ArrayList<>();
+    private ArrayList<Double> totalSplitEquitiesList = new ArrayList<>();
+
+    private float elapsedSeconds;
 
     private EquityCalculator equityCalculator = new EquityCalculator();
 
@@ -77,6 +80,42 @@ public class EquityHandler {
         this.handEquities = handEquities;
     }
 
+    public ArrayList<Double> getTotalEquitiesList() {
+        return totalEquitiesList;
+    }
+
+    public void setTotalEquitiesList(ArrayList<Double> totalEquitiesList) {
+        this.totalEquitiesList = totalEquitiesList;
+    }
+
+    public ArrayList<Double> getTotalWinEquitiesList() {
+        return totalWinEquitiesList;
+    }
+
+    public void setTotalWinEquitiesList(ArrayList<Double> totalWinEquitiesList) {
+        this.totalWinEquitiesList = totalWinEquitiesList;
+    }
+
+    public ArrayList<Double> getTotalSplitEquitiesList() {
+        return totalSplitEquitiesList;
+    }
+
+    public void setTotalSplitEquitiesList(ArrayList<Double> totalSplitEquitiesList) {
+        this.totalSplitEquitiesList = totalSplitEquitiesList;
+    }
+
+    public float getElapsedSeconds() {
+        return elapsedSeconds;
+    }
+
+    public void setElapsedSeconds(float elapsedSeconds) {
+        this.elapsedSeconds = elapsedSeconds;
+    }
+
+    public ArrayList<Card> getBoardCardsList() {
+        return equityCalculator.getBoardCards();
+    }
+
     public void calculateEquity() {
         try {
             if (!boardCards.isEmpty()) {
@@ -119,12 +158,16 @@ public class EquityHandler {
                 double winEquity = handEquity.getEquity();
                 double splitEquity = handEquity.getSplitEquity() / minSpliters;
 
+                totalEquitiesList.add(totalEquity);
+                totalWinEquitiesList.add(winEquity);
+                totalSplitEquitiesList.add(splitEquity);
+
                 System.out.println(String.format("Gracz %d: %s - %s --- ~%.2f %%", 1 + index, hands.get(index), handRanking, totalEquity));
                 System.out.println(String.format("Wygrana: ~%.2f %%", winEquity));
                 System.out.println(String.format("Split pot: ~%.2f %%", splitEquity));
             }
 
-            float elapsedSeconds = elapsedTime / 1000.0f;
+            elapsedSeconds = elapsedTime / 1000.0f;
             System.out.println(String.format("Zasymulowane %d boardow w %.1f sekund", equityCalculator.getMaxIterations(), elapsedSeconds));
 
         } catch (Exception e) {

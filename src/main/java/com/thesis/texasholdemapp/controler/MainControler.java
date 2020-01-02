@@ -1,6 +1,9 @@
 package com.thesis.texasholdemapp.controler;
 
 import com.thesis.texasholdemapp.handler.EquityHandler;
+import com.thesis.texasholdemapp.structure.Card;
+import com.thesis.texasholdemapp.structure.Hand;
+import com.thesis.texasholdemapp.structure.HandRanking;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,13 +11,38 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
 @Controller
 public class MainControler {
 
+    private EquityHandler equityHandler;
+
     @GetMapping("/")
     public String welcome(Model model) {
+        if(equityHandler != null) {
+            ArrayList<Hand> handsList = equityHandler.getHands();
+            ArrayList<HandRanking> handRankings = equityHandler.getHandRankings();
+
+            ArrayList<Double> totalEquitiesList = equityHandler.getTotalEquitiesList();
+            ArrayList<Double> totalWinEquitiesList = equityHandler.getTotalWinEquitiesList();
+            ArrayList<Double> totalSplitEquitiesList= equityHandler.getTotalSplitEquitiesList();
+
+            float elapsedSeconds = equityHandler.getElapsedSeconds();
+
+            ArrayList<Card> boardCards;
+
+            if(equityHandler.isBoard()) {
+                boardCards = equityHandler.getBoardCardsList();
+                model.addAttribute("board_cards", boardCards);
+            }
+
+            model.addAttribute("hands", handsList);
+            model.addAttribute("hand_rankings", handRankings);
+            model.addAttribute("total_equity", totalEquitiesList);
+            model.addAttribute("total_win", totalWinEquitiesList);
+            model.addAttribute("total_split", totalSplitEquitiesList);
+            model.addAttribute("elapsed_seconds", elapsedSeconds);
+        }
         return "index";
     }
 
@@ -32,7 +60,8 @@ public class MainControler {
                             @RequestParam(value = "board", required = false) String board,
                             Model model) throws Exception{
 
-        EquityHandler equityHandler = new EquityHandler();
+        equityHandler = new EquityHandler();
+
         ArrayList<String> hands = new ArrayList<>();
 
         if (!player_1.equals(""))        hands.add(player_1);

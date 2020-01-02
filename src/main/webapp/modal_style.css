@@ -1,0 +1,25 @@
+/*Modal style*/
+input[type=radio] {
+    display: none;
+}
+
+input[type=radio] + img {
+    cursor: pointer;
+
+    display: inline-block;
+    padding: 0 0;
+}
+
+input[type=radio]:checked + img {
+    border-color: red;
+    border-width: 2px;
+    border-style: solid;
+    height: 95px;
+    width: 70px;
+    display: inline-block;
+    padding: 0 0 0 0;
+}
+
+input[type=radio]#Ad + img{
+    display: inline-block !important;
+}

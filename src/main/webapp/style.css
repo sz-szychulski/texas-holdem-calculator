@@ -4,6 +4,7 @@
     margin: 0 auto;
 }
 
+/*Poker table styles*/
 .poker-table {
     position: relative;
     background-position: center;
@@ -17,133 +18,168 @@
 
 .player1 {
     position: absolute;
-    width: 105px;
-    height: 135px;
+    width: 145px;
+    height: 95px;
     background-color: #fff;
     border-color: black;
     border-style: solid;
     border-width: 2px;
-    padding: 2px;
+    margin: auto;
 
-    top: 45px;
-    left: 25px;
-
-    font-size: 11px;
+    top: 75px;
 }
 
 .player2 {
     position: absolute;
-    width: 105px;
-    height: 135px;
+    width: 145px;
+    height: 95px;
     background-color: #fff;
     border-color: black;
     border-style: solid;
     border-width: 2px;
 
-    top: 15px;
-    left: 225px;
+    top: 40px;
+    left: 180px;
 }
 
 .player3 {
     position: absolute;
-    width: 105px;
-    height: 135px;
+    width: 145px;
+    height: 95px;
     background-color: #fff;
     border-color: black;
     border-style: solid;
     border-width: 2px;
 
-    top: 15px;
-    left: 375px;
+    top: 40px;
+    left: 345px;
 }
 
 .player4 {
     position: absolute;
-    width: 105px;
-    height: 135px;
+    width: 145px;
+    height: 95px;
     background-color: #fff;
     border-color: black;
     border-style: solid;
     border-width: 2px;
 
-    top: 15px;
+    top: 40px;
     left: 515px;
 }
 
 .player5 {
     position: absolute;
-    width: 105px;
-    height: 135px;
+    width: 145px;
+    height: 95px;
     background-color: #fff;
     border-color: black;
     border-style: solid;
     border-width: 2px;
 
-    top: 45px;
-    left: 700px;
+    top: 75px;
+    left: 710px;
 }
 
 .player6 {
     position: absolute;
-    width: 105px;
-    height: 135px;
+    width: 145px;
+    height: 95px;
     background-color: #fff;
     border-color: black;
     border-style: solid;
     border-width: 2px;
 
-    top: 295px;
-    left: 740px;
+    top: 305px;
+    left: 775px;
 }
 
 .player7 {
     position: absolute;
-    width: 105px;
-    height: 135px;
+    width: 145px;
+    height: 95px;
     background-color: #fff;
     border-color: black;
     border-style: solid;
     border-width: 2px;
 
-    top: 345px;
-    left: 565px;
+    top: 360px;
+    left: 540px;
 }
 
 .player8 {
     position: absolute;
-    width: 105px;
-    height: 135px;
+    width: 145px;
+    height: 95px;
     background-color: #fff;
     border-color: black;
     border-style: solid;
     border-width: 2px;
 
-    top: 345px;
-    left: 375px;
+    top: 360px;
+    left: 355px;
 }
 
 .player9 {
     position: absolute;
-    width: 105px;
-    height: 135px;
+    width: 145px;
+    height: 95px;
     background-color: #fff;
     border-color: black;
     border-style: solid;
     border-width: 2px;
 
-    top: 335px;
-    left: 180px;
+    top: 360px;
+    left: 160px;
 }
 
 .player10 {
     position: absolute;
-    width: 105px;
-    height: 135px;
+    width: 145px;
+    height: 95px;
     background-color: #fff;
     border-color: black;
     border-style: solid;
     border-width: 2px;
 
-    top: 300px;
-    left: 10px;
+    top: 320px;
 }
+
+.board-cards {
+    position: absolute;
+    width: 430px;
+    height: 95px;
+    border-color: black;
+    border-style: solid;
+    border-width: 2px;
+
+    top: 185px;
+    left: 210px;
+}
+
+.flop {
+    float: left;
+    margin-right: 40px;
+}
+
+.turn {
+    float: left;
+    margin-right: 40px;
+}
+
+.river {
+    float: left;
+}
+
+.card {
+    float: left;
+    padding: 1px;
+}
+
+.card-back {
+    width: 65px;
+    height: 85px;
+
+    float: left;
+}
+
