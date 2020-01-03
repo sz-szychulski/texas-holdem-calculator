@@ -20,6 +20,6 @@ input[type=radio]:checked + img {
     padding: 0 0 0 0;
 }
 
-input[type=radio]#Ad + img{
-    display: inline-block !important;
+input[type=radio]:disabled + img {
+    opacity: 30%;
 }
