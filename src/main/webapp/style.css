@@ -1,7 +1,12 @@
 .content-container {
-    width: 80%;
+    width: 60%;
     height: 100%;
     margin: 0 auto;
+}
+
+.general label {
+    display: inline-block;
+    width: 200px;
 }
 
 /*Poker table styles*/
@@ -183,3 +188,9 @@
     float: left;
 }
 
+.calculate-button {
+    position: absolute;
+
+    top: 220px;
+    left: 650px;
+}

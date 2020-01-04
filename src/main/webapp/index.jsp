@@ -29,65 +29,18 @@
 <body>
     <div class="content-container">
         <h1>Aplikacja wspierająca podejmowanie decyzji w grze Texas Hold'em</h1>
-        <h2>Gracze:</h2>
-        <form method="post" action="/calculate">
-            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-            <div>
-                <label for="player1">Gracz 1: </label>
-                <input type="text" name="player1" id="player1"/>
-            </div>
-            <div>
-                <label for="player2">Gracz 2: </label>
-                <input type="text" name="player2" id="player2"/>
-            </div>
-            <div>
-                <label for="player3">Gracz 3: </label>
-                <input type="text" name="player3" id="player3"/>
-            </div>
-            <div>
-                <label for="player4">Gracz 4: </label>
-                <input type="text" name="player4" id="player4"/>
-            </div>
-            <div>
-                <label for="player5">Gracz 5: </label>
-                <input type="text" name="player5" id="player5"/>
-            </div>
-            <div>
-                <label for="player6">Gracz 6: </label>
-                <input type="text" name="player6" id="player6"/>
-            </div>
-            <div>
-                <label for="player7">Gracz 7: </label>
-                <input type="text" name="player7" id="player7"/>
-            </div>
-            <div>
-                <label for="player8">Gracz 8: </label>
-                <input type="text" name="player8" id="player8"/>
-            </div>
-            <div>
-                <label for="player9">Gracz 9: </label>
-                <input type="text" name="player9" id="player9"/>
-            </div>
-            <div>
-                <label for="player10">Gracz 10: </label>
-                <input type="text" name="player10" id="player10"/>
-            </div>
-            <div>
-                <label for="board">Karty wspólne: </label>
-                <input type="text" name="board" id="board"/>
-            </div>
-            <div>
-                <input type="submit" value="Oblicz" />
-            </div>
-        </form>
-        <hr />
 
-        <c:forEach items="${hands}" var="hand">
-            <c:out value="${hand}" />
-        </c:forEach>
-
-        <div class="poker-table">
-            <form method="post" action="/calculate">
+        <form method="post" class="general" action="/calculate">
+            <div>
+                <label for="isMonteCarlo">Algorytm Monte Carlo: </label>
+                <input type="checkbox" id="isMonteCarlo" name="isMonteCarlo" />
+            </div>
+            <div>
+                <label for="iterations">Liczba iteracji: </label>
+                <input type="number" id="iterations" name="iterations" min="1" disabled/>
+            </div>
+            <hr/>
+            <div class="poker-table">
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
                 <div class="board-cards">
@@ -222,8 +175,11 @@
                     </button>
                     <input type="text" id="player10-2-field" name="player10" hidden/>
                 </div>
-              </form>
-        </div>
+                <div class="calculate-button">
+                    <input type="submit" value="Oblicz" />
+                </div>
+            </div>
+        </form>
 
         <%-- Modal --%>
         <div class="modal fade" id="cardModal" tabindex="-1" role="dialog" aria-labelledby="cardModalLabel" aria-hidden="true">
@@ -237,202 +193,252 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                                    <div class="form-group text-center">
-                                        <label>
-                                            <input type="radio" name='card-pick' id="2c" value="2c"/><img src="images/2c.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="2d" value="2d"/><img src="images/2d.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="2h" value="2h"/><img src="images/2h.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="2s" value="2s"/><img src="images/2s.png" />
-                                        </label>
-                                    </div>
-                                    <div class="form-group text-center">
-                                        <label>
-                                            <input type="radio" name='card-pick' id="3c" value="3c"/><img src="images/3c.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="3d" value="3d"/><img src="images/3d.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="3h" value="3h"/><img src="images/3h.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="3s" value="3s"/><img src="images/3s.png" />
-                                        </label>
-                                    </div>
-                                    <div class="form-group text-center">
-                                        <label>
-                                            <input type="radio" name='card-pick' id="4c" value="4c"/><img src="images/4c.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="4d" value="4d"/><img src="images/4d.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="4h" value="4h"/><img src="images/4h.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="4s" value="4s"/><img src="images/4s.png" />
-                                        </label>
-                                    </div>
-                                    <div class="form-group text-center">
-                                        <label>
-                                            <input type="radio" name='card-pick' id="5c" value="5c"/><img src="images/5c.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="5d" value="5d"/><img src="images/5d.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="5h" value="5h"/><img src="images/5h.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="5s" value="5s"/><img src="images/5s.png" />
-                                        </label>
-                                    </div>
-                                    <div class="form-group text-center text-center">
-                                        <label>
-                                            <input type="radio" name='card-pick' id="6c" value="6c"/><img src="images/6c.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="6d" value="6d"/><img src="images/6d.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="6h" value="6h"/><img src="images/6h.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="6s" value="6s"/><img src="images/6s.png" />
-                                        </label>
-                                    </div>
-                                    <div class="form-group text-center">
-                                        <label>
-                                            <input type="radio" name='card-pick' id="7c" value="7c"/><img src="images/7c.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="7d" value="7d"/><img src="images/7d.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="7h" value="7h"/><img src="images/7h.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="7s" value="7s"/><img src="images/7s.png" />
-                                        </label>
-                                    </div>
-                                    <div class="form-group text-center">
-                                        <label>
-                                            <input type="radio" name='card-pick' id="8c" value="8c"/><img src="images/8c.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="8d" value="8d"/><img src="images/8d.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="8h" value="8h"/><img src="images/8h.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="8s" value="8s"/><img src="images/8s.png" />
-                                        </label>
-                                    </div>
-                                    <div class="form-group text-center">
-                                        <label>
-                                            <input type="radio" name='card-pick' id="9c" value="9c"/><img src="images/9c.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="9d" value="9d"/><img src="images/9d.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="9h" value="9h"/><img src="images/9h.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="9s" value="9s"/><img src="images/9s.png" />
-                                        </label>
-                                    </div>
-                                    <div class="form-group text-center">
-                                        <label>
-                                            <input type="radio" name='card-pick' id="Tc" value="Tc"/><img src="images/Tc.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="Td" value="Td"/><img src="images/Td.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="Th" value="Th"/><img src="images/Th.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="Ts" value="Ts"/><img src="images/Ts.png" />
-                                        </label>
-                                    </div>
-                                    <div class="form-group text-center">
-                                        <label>
-                                            <input type="radio" name='card-pick' id="Jc" value="Jc"/><img src="images/Jc.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="Jd" value="Jd"/><img src="images/Jd.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="Jh" value="Jh"/><img src="images/Jh.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="Js" value="Js"/><img src="images/Js.png" />
-                                        </label>
-                                    </div>
-                                    <div class="form-group text-center">
-                                        <label>
-                                            <input type="radio" name='card-pick' id="Qc" value="Qc"/><img src="images/Qc.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="Qd" value="Qd"/><img src="images/Qd.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="Qh" value="Qh"/><img src="images/Qh.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="Qs" value="Qs"/><img src="images/Qs.png" />
-                                        </label>
-                                    </div>
-                                    <div class="form-group text-center">
-                                        <label>
-                                            <input type="radio" name='card-pick' id="Kc" value="Kc"/><img src="images/Kc.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="Kd" value="Kd"/><img src="images/Kd.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="Kh" value="Kh"/><img src="images/Kh.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="Ks" value="Ks"/><img src="images/Ks.png" />
-                                        </label>
-                                    </div>
-                                    <div class="form-group text-center">
-                                        <label>
-                                            <input type="radio" name='card-pick' id="Ac" value="Ac"/><img src="images/Ac.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="Aced" value="Aced"/><img src="images/Aced.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="Ah" value="Ah"/><img src="images/Ah.png" />
-                                        </label>
-                                        <label>
-                                            <input type="radio" name='card-pick' id="As" value="As"/><img src="images/As.png" />
-                                        </label>
-                                    </div>
+                            <div class="form-group text-center">
+                                <label>
+                                    <input type="radio" name='card-pick' id="2c"  value="2c" onclick="changeCard()" />
+                                    <img src="images/2c.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="2d" value="2d" onclick="changeCard()" />
+                                    <img src="images/2d.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="2h" value="2h" onclick="changeCard()" />
+                                    <img src="images/2h.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="2s" value="2s" onclick="changeCard()" />
+                                    <img src="images/2s.png" />
+                                </label>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" onclick="changeCard()" data-dismiss="modal"
-                                        class="btn btn-primary">Wybierz</button>
+                            <div class="form-group text-center">
+                                <label>
+                                    <input type="radio" name='card-pick' id="3c" value="3c" onclick="changeCard()" />
+                                    <img src="images/3c.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="3d" value="3d" onclick="changeCard()" />
+                                    <img src="images/3d.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="3h" value="3h" onclick="changeCard()" />
+                                    <img src="images/3h.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="3s" value="3s" onclick="changeCard()" />
+                                    <img src="images/3s.png" />
+                                </label>
                             </div>
-                        </form>
-                    </div>
+                            <div class="form-group text-center">
+                                <label>
+                                    <input type="radio" name='card-pick' id="4c" value="4c" onclick="changeCard()" />
+                                    <img src="images/4c.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="4d" value="4d" onclick="changeCard()" />
+                                    <img src="images/4d.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="4h" value="4h" onclick="changeCard()"/>
+                                    <img src="images/4h.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="4s" value="4s" onclick="changeCard()" />
+                                    <img src="images/4s.png" />
+                                </label>
+                            </div>
+                            <div class="form-group text-center">
+                                <label>
+                                    <input type="radio" name='card-pick' id="5c" value="5c" onclick="changeCard()" />
+                                    <img src="images/5c.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="5d" value="5d" onclick="changeCard()"/>
+                                    <img src="images/5d.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="5h" value="5h" onclick="changeCard()"/>
+                                    <img src="images/5h.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="5s" value="5s" onclick="changeCard()"/>
+                                    <img src="images/5s.png" />
+                                </label>
+                            </div>
+                            <div class="form-group text-center">
+                                <label>
+                                    <input type="radio" name='card-pick' id="6c" value="6c" onclick="changeCard()"/>
+                                    <img src="images/6c.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="6d" value="6d" onclick="changeCard()" />
+                                    <img src="images/6d.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="6h" value="6h" onclick="changeCard()" />
+                                    <img src="images/6h.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="6s" value="6s" onclick="changeCard()" />
+                                    <img src="images/6s.png" />
+                                </label>
+                            </div>
+                            <div class="form-group text-center">
+                                <label>
+                                    <input type="radio" name='card-pick' id="7c" value="7c" onclick="changeCard()" />
+                                    <img src="images/7c.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="7d" value="7d" onclick="changeCard()" />
+                                    <img src="images/7d.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="7h" value="7h" onclick="changeCard()" />
+                                    <img src="images/7h.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="7s" value="7s" onclick="changeCard()" />
+                                    <img src="images/7s.png" />
+                                </label>
+                            </div>
+                            <div class="form-group text-center">
+                                <label>
+                                    <input type="radio" name='card-pick' id="8c" value="8c" onclick="changeCard()" />
+                                    <img src="images/8c.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="8d" value="8d" onclick="changeCard()" />
+                                    <img src="images/8d.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="8h" value="8h" onclick="changeCard()" />
+                                    <img src="images/8h.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="8s" value="8s" onclick="changeCard()" />
+                                    <img src="images/8s.png" />
+                                </label>
+                            </div>
+                            <div class="form-group text-center">
+                                <label>
+                                    <input type="radio" name='card-pick' id="9c" value="9c" onclick="changeCard()" />
+                                    <img src="images/9c.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="9d" value="9d" onclick="changeCard()" />
+                                    <img src="images/9d.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="9h" value="9h" onclick="changeCard()" />
+                                    <img src="images/9h.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="9s" value="9s" onclick="changeCard()" />
+                                    <img src="images/9s.png" />
+                                </label>
+                            </div>
+                            <div class="form-group text-center">
+                                <label>
+                                    <input type="radio" name='card-pick' id="Tc" value="Tc" onclick="changeCard()" />
+                                    <img src="images/Tc.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="Td" value="Td" onclick="changeCard()" />
+                                    <img src="images/Td.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="Th" value="Th" onclick="changeCard()" />
+                                    <img src="images/Th.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="Ts" value="Ts" onclick="changeCard()"/>
+                                    <img src="images/Ts.png" />
+                                </label>
+                            </div>
+                            <div class="form-group text-center">
+                                <label>
+                                    <input type="radio" name='card-pick' id="Jc" value="Jc" onclick="changeCard()" />
+                                    <img src="images/Jc.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="Jd" value="Jd" onclick="changeCard()" />
+                                    <img src="images/Jd.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="Jh" value="Jh" onclick="changeCard()" />
+                                    <img src="images/Jh.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="Js" value="Js" onclick="changeCard()" />
+                                    <img src="images/Js.png" />
+                                </label>
+                            </div>
+                            <div class="form-group text-center">
+                                <label>
+                                    <input type="radio" name='card-pick' id="Qc" value="Qc" onclick="changeCard()" />
+                                    <img src="images/Qc.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="Qd" value="Qd" onclick="changeCard()" />
+                                    <img src="images/Qd.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="Qh" value="Qh" onclick="changeCard()" />
+                                    <img src="images/Qh.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="Qs" value="Qs" onclick="changeCard()" />
+                                    <img src="images/Qs.png" />
+                                </label>
+                            </div>
+                            <div class="form-group text-center">
+                                <label>
+                                    <input type="radio" name='card-pick' id="Kc" value="Kc" onclick="changeCard()" />
+                                    <img src="images/Kc.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="Kd" value="Kd" onclick="changeCard()" />
+                                    <img src="images/Kd.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="Kh" value="Kh" onclick="changeCard()" />
+                                    <img src="images/Kh.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="Ks" value="Ks" onclick="changeCard()" />
+                                    <img src="images/Ks.png" />
+                                </label>
+                            </div>
+                            <div class="form-group text-center">
+                                <label>
+                                    <input type="radio" name='card-pick' id="Ac" value="Ac" onclick="changeCard()" />
+                                    <img src="images/Ac.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="Aced" value="Aced" onclick="changeCard()" />
+                                    <img src="images/Aced.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="Ah" value="Ah" onclick="changeCard()" />
+                                    <img src="images/Ah.png" />
+                                </label>
+                                <label>
+                                    <input type="radio" name='card-pick' id="As" value="As" onclick="changeCard()" />
+                                    <img src="images/As.png" />
+                                </label>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
+        </div>
+
     </div>
 
     <script>
         var cardPos;
 
+        //parsing data for modal
         $('#cardModal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
 
@@ -441,6 +447,7 @@
             modal.find('.modal-title').text('Wybierz karte dla: ' + cardPos);
         });
 
+        //changing card function
         function changeCard() {
             var pickCard = document.querySelector('input[name="card-pick"]:checked').value;
             var prevCard = $('#' + cardPos + '-field').val();
@@ -448,11 +455,21 @@
                 $('#' +  prevCard).removeAttr('disabled');
             }
 
-            $('#' + cardPos + '-field').val(pickCard);
+            if(pickCard === "Aced") {
+                $('#' + cardPos + '-field').val("Ad");
+            } else {
+                $('#' + cardPos + '-field').val(pickCard);
+            }
 
-            $('#' + pickCard).attr('disabled', true);
             $('#' + cardPos).attr('src', 'images/' + pickCard + '.png');
+            $('#' + pickCard).attr('disabled', true);
+            $('#cardModal').modal('hide');
         }
+
+        //toggle 'iterations' input
+        document.getElementById('isMonteCarlo').onchange = function() {
+            document.getElementById('iterations').disabled = !this.checked;
+        };
     </script>
 </body>
 </html>
