@@ -1,6 +1,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%
     response.setCharacterEncoding("UTF-8");
     request.setCharacterEncoding("UTF-8");
@@ -29,25 +30,43 @@
 <div class="content-container">
     <h1>Aplikacja wspierająca podejmowanie decyzji w grze Texas Hold'em</h1>
 
+    <hr/>
+
     <div class="board-results">
+        <h2>Karty wspólne</h2>
         <c:forEach items="${board_cards}" var="card">
-            <img src="/images/${card}" />
+            <img src="/images/${card}.png" />
         </c:forEach>
     </div>
 
+    <hr/>
+
+    <div class="players-results">
     <c:forEach var = "index" begin = "0" end = "${players}">
-        <h5>Gracz <c:out value = "${index} + 1"/></h5>
-        <img src="/images/<c:out value = "${hands[0][0]}"/>" />
-        <img src="/images/<c:out value = "${hands[0][1]}"/>" />
-
-        <p></p>
-
+        <div>
+            <h5>Gracz <c:out value = "${index + 1}"/></h5>
+            <img src="/images/<c:out value = "${hands_string[index][0]}"/>.png" />
+            <img src="/images/<c:out value = "${hands_string[index][1]}"/>.png" />
+            <br/><br/>
+            <p>Układ: <c:out value = "${hand_rankings[index]}"/></p>
+            <p>Całkowite szanse: <fmt:formatNumber type="number" maxFractionDigits="2" value="${total_equity[index]}"/>%</p>
+            <p>Szanse wygranej: <fmt:formatNumber type="number" maxFractionDigits="2" value="${total_win[index]}"/>%</p>
+            <p>Podział puli: <fmt:formatNumber type="number" maxFractionDigits="2" value="${total_split[index]}"/>%</p>
+        </div>
+        <hr />
     </c:forEach>
+    </div>
 
-    <p>${hands}</p>
-    <p>${players}</p>
+    <div class="raport-form">
+        <form>
+            <input type="submit" value="Wygeneruj raport" />
+        </form>
+    </div>
 
-    <a href="/" >Wróć</a>
+    <div style="float: left">
+        <a href="/" ><button>Wróć</button></a>
+    </div>
+
 </div>
 
 </body>

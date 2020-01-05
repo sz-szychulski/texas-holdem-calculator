@@ -30,6 +30,8 @@
     <div class="content-container">
         <h1>Aplikacja wspierająca podejmowanie decyzji w grze Texas Hold'em</h1>
 
+        <hr/>
+
         <form method="post" class="general" action="/calculate">
             <div>
                 <label for="isMonteCarlo">Algorytm Monte Carlo: </label>

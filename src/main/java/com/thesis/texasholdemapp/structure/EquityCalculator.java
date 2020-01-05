@@ -104,6 +104,14 @@ public class EquityCalculator {
         return equities.get(handIndex);
     }
 
+    public boolean isMonteCarlo() {
+        return isMonteCarlo;
+    }
+
+    public void setMonteCarlo(boolean monteCarlo) {
+        isMonteCarlo = monteCarlo;
+    }
+
     public EquityCalculator addHand(Hand hand) {
         hands.add(hand);
         return this;

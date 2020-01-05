@@ -5,8 +5,8 @@ import com.thesis.texasholdemapp.structure.*;
 import java.util.ArrayList;
 
 public class EquityHandler {
-    private boolean isBoard = false;
-    private String boardCards = "";
+    private boolean isBoard;
+    private String boardCards;
 
     private ArrayList<String> handsString = new ArrayList<>();
     private ArrayList<Hand> hands = new ArrayList<>();
@@ -23,6 +23,10 @@ public class EquityHandler {
     private EquityCalculator equityCalculator = new EquityCalculator();
 
     public EquityHandler() {
+        equityCalculator = new EquityCalculator();
+        isBoard = false;
+        boardCards = "";
+        elapsedSeconds = 0;
     }
 
     public EquityHandler(boolean isBoard, String boardCards, ArrayList<String> handsString, ArrayList<Hand> hands) {
@@ -116,6 +120,14 @@ public class EquityHandler {
         return equityCalculator.getBoardCards();
     }
 
+    public void setIterations(int iterations) {
+        equityCalculator.setMaxIterations(iterations);
+    }
+
+    public void isMonteCarlo(boolean using) {
+        equityCalculator.setMonteCarlo(using);
+    }
+
     public void calculateEquity() {
         try {
             if (!boardCards.isEmpty()) {
@@ -136,6 +148,7 @@ public class EquityHandler {
             equityCalculator.printBoardCards();
 
             float minSpliters = hands.size();
+
             for(int index = 0; index < hands.size(); index++) {
                 HandRanking handRanking = equityCalculator.getHandRanking(index);
                 HandEquity handEquity = equityCalculator.getHandEquity(index);
