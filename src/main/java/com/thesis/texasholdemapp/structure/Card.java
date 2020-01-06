@@ -31,7 +31,7 @@ public class Card implements Comparable<Card> {
 
     public static Card fromString(String value) throws Exception{
         if(value.length() != 2) {
-            throw new Exception(String.format("Invalid card value: %s", value));
+            throw new Exception(String.format("Niepoprawna karta: %s", value));
         }
 
         String stringRank = value.substring(0, 1).toLowerCase();
@@ -52,7 +52,7 @@ public class Card implements Comparable<Card> {
                 cardSuit = CardSuit.SPADE;
                 break;
             default:
-                throw new Exception(String.format("Wrong card suit: %s", stringSuit));
+                throw new Exception(String.format("Zły format koloru karty: %s", stringSuit));
         }
 
         CardRanking cardRanking;
@@ -78,11 +78,11 @@ public class Card implements Comparable<Card> {
                     if (numRanking >= 2 && numRanking <= 9) {
                         cardRanking = new CardRanking(numRanking);
                     } else {
-                        throw new Exception(String.format("Wrong card rank: %s", stringRank));
+                        throw new Exception(String.format("Zły format karty: %s", stringRank));
                     }
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
-                    throw new Exception(String.format("Wrong card rank: %s", stringRank));
+                    throw new Exception(String.format("Zły format karty: %s", stringRank));
                 }
         }
         return new Card(cardRanking, cardSuit);

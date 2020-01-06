@@ -1,6 +1,5 @@
 package com.thesis.texasholdemapp.structure;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -123,21 +122,29 @@ public class EquityCalculator {
             Card card2 = hands.get(handIndex).getCard(1);
 
             if (card1.equals(card2)) {
-                throw new Exception("Duplikacja kart");
+                throw new Exception(String.format("Duplikat kart: %s", card1));
             }
 
             for(int secondHandIndex = handIndex + 1; secondHandIndex < hands.size(); secondHandIndex++) {
                 Card card3 = hands.get(secondHandIndex).getCard(0);
                 Card card4 = hands.get(secondHandIndex).getCard(1);
 
-                if (card1.equals(card3) || card1.equals(card4) || card2.equals(card3) || card2.equals(card4)) {
-                    throw new Exception("Duplicattt");
+                if (card1.equals(card3) || card1.equals(card4)) {
+                    throw new Exception(String.format("Duplikat kart: %s", card1));
+                }
+
+                if (card2.equals(card3) || card2.equals(card4)) {
+                    throw new Exception(String.format("Duplikat kart: %s", card2));
                 }
             }
 
             for(Card boardCard : boardCards) {
-                if (card1.equals(boardCard) || card2.equals(boardCard)) {
-                    throw new Exception("Duplikate na boardziate");
+                if (card1.equals(boardCard)) {
+                    throw new Exception(String.format("Duplikat z kartą na stole: %s", card1));
+                }
+
+                if (card2.equals(boardCard)) {
+                    throw new Exception(String.format("Duplikat z kartą na stole: %s", card2));
                 }
             }
         }

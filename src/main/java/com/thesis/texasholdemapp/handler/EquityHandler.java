@@ -175,13 +175,13 @@ public class EquityHandler {
                 totalWinEquitiesList.add(winEquity);
                 totalSplitEquitiesList.add(splitEquity);
 
-                System.out.println(String.format("Gracz %d: %s - %s --- ~%.2f %%", 1 + index, hands.get(index), handRanking, totalEquity));
-                System.out.println(String.format("Wygrana: ~%.2f %%", winEquity));
-                System.out.println(String.format("Split pot: ~%.2f %%", splitEquity));
+//                System.out.println(String.format("Gracz %d: %s - %s --- ~%.2f %%", 1 + index, hands.get(index), handRanking, totalEquity));
+//                System.out.println(String.format("Wygrana: ~%.2f %%", winEquity));
+//                System.out.println(String.format("Split pot: ~%.2f %%", splitEquity));
             }
 
             elapsedSeconds = elapsedTime / 1000.0f;
-            System.out.println(String.format("Zasymulowane %d boardow w %.1f sekund", equityCalculator.getMaxIterations(), elapsedSeconds));
+//            System.out.println(String.format("Zasymulowane %d boardow w %.1f sekund", equityCalculator.getMaxIterations(), elapsedSeconds));
 
         } catch (Exception e) {
             e.printStackTrace();
