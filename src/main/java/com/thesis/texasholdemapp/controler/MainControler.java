@@ -3,12 +3,19 @@ package com.thesis.texasholdemapp.controler;
 import com.thesis.texasholdemapp.builder.OutputBuilder;
 import com.thesis.texasholdemapp.handler.EquityHandler;
 import com.thesis.texasholdemapp.handler.ErrorHandler;
+import com.thesis.texasholdemapp.model.User;
+import com.thesis.texasholdemapp.service.SecurityService;
+import com.thesis.texasholdemapp.service.UserService;
 import com.thesis.texasholdemapp.structure.Card;
 import com.thesis.texasholdemapp.structure.Hand;
 import com.thesis.texasholdemapp.structure.HandRanking;
+import com.thesis.texasholdemapp.validator.UserValidator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -18,13 +25,55 @@ import java.util.ArrayList;
 @Controller
 public class MainControler {
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private SecurityService securityService;
+
+    @Autowired
+    private UserValidator userValidator;
+
     private OutputBuilder outputBuilder = new OutputBuilder();
-    private ErrorHandler errorHandler;
 
     @GetMapping("/")
     public String welcome(Model model) {
         return "index";
     }
+
+    @GetMapping("/registration")
+    public String registration(Model model) {
+        model.addAttribute("userForm", new User());
+        return "registration";
+    }
+
+    @PostMapping("/registration")
+    public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult) {
+        userValidator.validate(userForm, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            return "registration";
+        }
+
+        userService.save(userForm);
+
+        securityService.autoLogin(userForm.getUsername(), userForm.getPasswordConfirm());
+
+        return "redirect:/";
+    }
+
+    @GetMapping("/login")
+    public String login(Model model, String error, String logout) {
+        if (error != null)
+            model.addAttribute("error", "Niepoprawny login lub hasło.");
+
+        if (logout != null)
+            model.addAttribute("message", "Pomyślnie wylogowano.");
+
+        return "login";
+    }
+
+
 
     @PostMapping("/calculate")
     public String calculate(@RequestParam(value = "isMonteCarlo", required = false) boolean isMonteCarlo,

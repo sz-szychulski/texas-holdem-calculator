@@ -11,8 +11,8 @@
 <head>
     <title>Praca inżynierska - Sebastian Szychulski</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="modal_style.css" />
+    <link rel="stylesheet" href="${contextPath}/resources/css/style.css" />
+    <link rel="stylesheet" href="${contextPath}/resources/css/modal_style.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
           crossorigin="anonymous">
@@ -29,8 +29,17 @@
 <body>
     <div class="content-container">
         <h1>Aplikacja wspierająca podejmowanie decyzji w grze Texas Hold'em</h1>
+        <div>
+            <p>Witaj ${pageContext.request.userPrincipal.name} <button onclick="document.forms['logoutForm'].submit()">Wyloguj</button></p>
+        </div>
 
         <hr/>
+
+        <c:if test="${pageContext.request.userPrincipal.name != null}">
+        <form id="logoutForm" method="POST" action="${contextPath}/logout">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+        </form>
+        </c:if>
 
         <form method="post" class="general" action="/calculate">
             <div>
