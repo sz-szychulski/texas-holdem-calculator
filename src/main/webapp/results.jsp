@@ -59,7 +59,7 @@
 
     <div class="raport-form">
         <form>
-            <input type="submit" value="Wygeneruj raport" />
+            <input type="submit" value="Zapisz do bazy" />
         </form>
     </div>
 
