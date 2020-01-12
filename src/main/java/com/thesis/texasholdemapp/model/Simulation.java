@@ -7,6 +7,16 @@ import java.util.Set;
 @Entity
 @Table(name = "simulation")
 public class Simulation {
+
+    public Simulation(String userName, String boardCards, Boolean isMonteCarlo, Integer iterations, Date date, Set<Player> players) {
+        this.userName = userName;
+        this.boardCards = boardCards;
+        this.isMonteCarlo = isMonteCarlo;
+        this.iterations = iterations;
+        this.date = date;
+        this.players = players;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "simulation_id")
