@@ -57,11 +57,7 @@
     </c:forEach>
     </div>
 
-    <div class="raport-form">
-        <form>
-            <input type="submit" value="Zapisz do bazy" />
-        </form>
-    </div>
+    <a href="/save"><button>Zapisz do bazy</button></a>
 
     <div style="float: left">
         <a href="/" ><button>Wróć</button></a>

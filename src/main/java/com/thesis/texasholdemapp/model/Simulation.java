@@ -8,13 +8,12 @@ import java.util.Set;
 @Table(name = "simulation")
 public class Simulation {
 
-    public Simulation(String userName, String boardCards, Boolean isMonteCarlo, Integer iterations, Date date, Set<Player> players) {
+    public Simulation(String userName, String boardCards, Boolean isMonteCarlo, Long iterations, Date date) {
         this.userName = userName;
         this.boardCards = boardCards;
         this.isMonteCarlo = isMonteCarlo;
         this.iterations = iterations;
         this.date = date;
-        this.players = players;
     }
 
     @Id
@@ -32,7 +31,7 @@ public class Simulation {
     private Boolean isMonteCarlo;
 
     @Column(name = "iterations")
-    private Integer iterations;
+    private Long iterations;
 
     @Column(name = "date_time")
     private Date date;
@@ -72,11 +71,11 @@ public class Simulation {
         isMonteCarlo = monteCarlo;
     }
 
-    public Integer getIterations() {
+    public Long getIterations() {
         return iterations;
     }
 
-    public void setIterations(Integer iterations) {
+    public void setIterations(Long iterations) {
         this.iterations = iterations;
     }
 

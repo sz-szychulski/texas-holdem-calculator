@@ -116,16 +116,12 @@ public class EquityHandler {
         this.elapsedSeconds = elapsedSeconds;
     }
 
-    public ArrayList<Card> getBoardCardsList() {
-        return equityCalculator.getBoardCards();
+    public EquityCalculator getEquityCalculator() {
+        return equityCalculator;
     }
 
-    public void setIterations(int iterations) {
-        equityCalculator.setMaxIterations(iterations);
-    }
-
-    public void isMonteCarlo(boolean using) {
-        equityCalculator.setMonteCarlo(using);
+    public void setEquityCalculator(EquityCalculator equityCalculator) {
+        this.equityCalculator = equityCalculator;
     }
 
     public void calculateEquity() {

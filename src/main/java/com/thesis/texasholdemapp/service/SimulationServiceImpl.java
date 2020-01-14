@@ -3,7 +3,9 @@ package com.thesis.texasholdemapp.service;
 import com.thesis.texasholdemapp.model.Simulation;
 import com.thesis.texasholdemapp.repository.SimulationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class SimulationServiceImpl implements SimulationService {
 
     @Autowired

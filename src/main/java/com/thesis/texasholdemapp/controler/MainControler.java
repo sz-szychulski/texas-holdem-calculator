@@ -3,14 +3,20 @@ package com.thesis.texasholdemapp.controler;
 import com.thesis.texasholdemapp.builder.OutputBuilder;
 import com.thesis.texasholdemapp.handler.EquityHandler;
 import com.thesis.texasholdemapp.handler.ErrorHandler;
+import com.thesis.texasholdemapp.model.Player;
+import com.thesis.texasholdemapp.model.Simulation;
 import com.thesis.texasholdemapp.model.User;
+import com.thesis.texasholdemapp.service.PlayerService;
 import com.thesis.texasholdemapp.service.SecurityService;
+import com.thesis.texasholdemapp.service.SimulationService;
 import com.thesis.texasholdemapp.service.UserService;
 import com.thesis.texasholdemapp.structure.Card;
 import com.thesis.texasholdemapp.structure.Hand;
 import com.thesis.texasholdemapp.structure.HandRanking;
 import com.thesis.texasholdemapp.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,8 +25,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
+import java.util.Date;
+import java.util.HashSet;
 
 @Controller
 public class MainControler {
@@ -34,7 +42,21 @@ public class MainControler {
     @Autowired
     private UserValidator userValidator;
 
+    @Autowired
+    private SimulationService simulationService;
+
+    @Autowired
+    private PlayerService playerService;
+
+
+    private EquityHandler equityHandler = new EquityHandler();
     private OutputBuilder outputBuilder = new OutputBuilder();
+
+    private ArrayList<String> hands                     = new ArrayList<>();
+    private ArrayList<ArrayList<String>> stringHands    = new ArrayList<>();
+    private ArrayList<Card> boardCards                  = new ArrayList<>();
+
+    private String usedMethod = "";
 
     @GetMapping("/")
     public String welcome(Model model) {
@@ -73,8 +95,6 @@ public class MainControler {
         return "login";
     }
 
-
-
     @PostMapping("/calculate")
     public String calculate(@RequestParam(value = "isMonteCarlo", required = false) boolean isMonteCarlo,
                             @RequestParam(value = "iterations", required = false)   Integer iterations,
@@ -93,9 +113,10 @@ public class MainControler {
                             @RequestParam(value = "player10", required = false)     String[] player_10,
                             Model model) throws Exception{
 
-        EquityHandler equityHandler = new EquityHandler();
-        ArrayList<String> hands = new ArrayList<>();
-        ArrayList<ArrayList<String>> stringHands = new ArrayList<>();
+        equityHandler   = new EquityHandler();
+        hands           = new ArrayList<>();
+        stringHands     = new ArrayList<>();
+        boardCards      = new ArrayList<>();
 
         if (outputBuilder.isNotEmpty(player_1)) {
             hands.add(outputBuilder.handFromArray(player_1));
@@ -139,9 +160,13 @@ public class MainControler {
         }
 
         if (isMonteCarlo) {
-            equityHandler.isMonteCarlo(true);
-            equityHandler.setIterations(iterations);
-        } else equityHandler.isMonteCarlo(false);
+            equityHandler.getEquityCalculator().setMonteCarlo(true);
+            equityHandler.getEquityCalculator().setMaxIterations(iterations);
+            usedMethod = "Algorytm Monte Carlo";
+        } else {
+            equityHandler.getEquityCalculator().setMonteCarlo(false);
+            usedMethod = "Algorytm iteracyjny";
+        }
 
         if (outputBuilder.isNotEmpty(flop)) {
             equityHandler.setBoard(true);
@@ -153,33 +178,62 @@ public class MainControler {
         equityHandler.setHandsString(hands);
         equityHandler.calculateEquity();
 
-        ArrayList<Hand> handsList = equityHandler.getHands();
-        ArrayList<HandRanking> handRankings = equityHandler.getHandRankings();
-
-        ArrayList<Double> totalEquitiesList = equityHandler.getTotalEquitiesList();
-        ArrayList<Double> totalWinEquitiesList = equityHandler.getTotalWinEquitiesList();
-        ArrayList<Double> totalSplitEquitiesList= equityHandler.getTotalSplitEquitiesList();
-
-        float elapsedSeconds = equityHandler.getElapsedSeconds();
-
-        ArrayList<Card> boardCards;
-
         if(equityHandler.isBoard()) {
-            boardCards = equityHandler.getBoardCardsList();
+            boardCards = equityHandler.getEquityCalculator().getBoardCards();
             model.addAttribute("board_cards", boardCards);
         } else {
             model.addAttribute("board_cards", "");
         }
 
-        model.addAttribute("hands", handsList);
+        model.addAttribute("hands", equityHandler.getHands());
         model.addAttribute("hands_string", stringHands);
-        model.addAttribute("players", handsList.size() - 1);
-        model.addAttribute("hand_rankings", handRankings);
-        model.addAttribute("total_equity", totalEquitiesList);
-        model.addAttribute("total_win", totalWinEquitiesList);
-        model.addAttribute("total_split", totalSplitEquitiesList);
-        model.addAttribute("elapsed_seconds", elapsedSeconds);
+        model.addAttribute("players",  equityHandler.getHands().size() - 1);
+        model.addAttribute("hand_rankings", equityHandler.getHandRankings());
+        model.addAttribute("total_equity", equityHandler.getTotalEquitiesList());
+        model.addAttribute("total_win", equityHandler.getTotalWinEquitiesList());
+        model.addAttribute("total_split", equityHandler.getTotalSplitEquitiesList());
 
         return "results";
+    }
+
+    @GetMapping("/save")
+    public String save() {
+        HashSet<Player> playersSet = new HashSet<>();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        Date date = new Date();
+
+        StringBuilder boardCardsString = new StringBuilder();
+        for (Card card : boardCards) {
+            boardCardsString.append(card.toString());
+        }
+
+        Simulation currentSimulation = new Simulation(
+                username,
+                boardCardsString.toString(),
+                equityHandler.getEquityCalculator().isMonteCarlo(),
+                equityHandler.getEquityCalculator().getMaxIterations(),
+                date
+                );
+
+        simulationService.createSimulation(currentSimulation);
+
+        for (int index = 0; index < equityHandler.getHands().size(); index++) {
+            String cards = stringHands.get(index).get(0) + stringHands.get(index).get(1);
+            Player currentPlayer = new Player(
+                    cards,
+                    equityHandler.getHandEquities().get(index).getBestHandsCount(),
+                    equityHandler.getHandEquities().get(index).getSplitHandsCount(),
+                    currentSimulation);
+            playersSet.add(currentPlayer);
+            playerService.createPlayer(currentPlayer);
+        }
+
+        currentSimulation.setPlayers(playersSet);
+        simulationService.createSimulation(currentSimulation);
+
+        return "redirect:/";
     }
 }
