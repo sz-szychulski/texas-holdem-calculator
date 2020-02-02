@@ -6,6 +6,9 @@ import javax.persistence.*;
 @Table(name = "player")
 public class Player {
 
+    public Player() {
+    }
+
     public Player(String cards, Integer simulationsWon, Integer simulationsSplitted, Simulation simulation) {
         this.cards = cards;
         this.simulationsWon = simulationsWon;

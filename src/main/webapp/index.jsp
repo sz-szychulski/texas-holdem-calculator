@@ -41,6 +41,12 @@
         </form>
         </c:if>
 
+        <div>
+            <a href="/reports"><button id="generateRaport" >Wygeneruj raport z bazy</button></a>
+        </div>
+
+        <br/>
+
         <form method="post" class="general" action="/calculate">
             <div>
                 <label for="isMonteCarlo">Algorytm Monte Carlo: </label>

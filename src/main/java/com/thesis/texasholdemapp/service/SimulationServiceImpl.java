@@ -5,6 +5,8 @@ import com.thesis.texasholdemapp.repository.SimulationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SimulationServiceImpl implements SimulationService {
 
@@ -19,6 +21,11 @@ public class SimulationServiceImpl implements SimulationService {
     @Override
     public Simulation getSimulation(Long id) {
         return simulationRepository.getOne(id);
+    }
+
+    @Override
+    public List<Simulation> getAllSimulations() {
+        return simulationRepository.findAll();
     }
 
     @Override

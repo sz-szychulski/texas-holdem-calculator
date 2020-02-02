@@ -6,10 +6,7 @@ import com.thesis.texasholdemapp.handler.ErrorHandler;
 import com.thesis.texasholdemapp.model.Player;
 import com.thesis.texasholdemapp.model.Simulation;
 import com.thesis.texasholdemapp.model.User;
-import com.thesis.texasholdemapp.service.PlayerService;
-import com.thesis.texasholdemapp.service.SecurityService;
-import com.thesis.texasholdemapp.service.SimulationService;
-import com.thesis.texasholdemapp.service.UserService;
+import com.thesis.texasholdemapp.service.*;
 import com.thesis.texasholdemapp.structure.Card;
 import com.thesis.texasholdemapp.structure.Hand;
 import com.thesis.texasholdemapp.structure.HandRanking;
@@ -25,10 +22,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.File;
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 
 @Controller
 public class MainControler {
@@ -48,6 +48,8 @@ public class MainControler {
     @Autowired
     private PlayerService playerService;
 
+    @Autowired
+    private ReportService reportService;
 
     private EquityHandler equityHandler = new EquityHandler();
     private OutputBuilder outputBuilder = new OutputBuilder();
@@ -196,8 +198,8 @@ public class MainControler {
         return "results";
     }
 
-    @GetMapping("/save")
-    public String save() {
+    @PostMapping("/save")
+    public String save(@RequestParam(value = "simulationName") String simulationName) throws Exception {
         HashSet<Player> playersSet = new HashSet<>();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
@@ -211,6 +213,7 @@ public class MainControler {
         }
 
         Simulation currentSimulation = new Simulation(
+                simulationName,
                 username,
                 boardCardsString.toString(),
                 equityHandler.getEquityCalculator().isMonteCarlo(),
@@ -236,4 +239,36 @@ public class MainControler {
 
         return "redirect:/";
     }
+
+    @GetMapping("/reports")
+    public String reports(Model model) {
+        List<Simulation> simulations = simulationService.getAllSimulations();
+        ArrayList<Simulation> userSimulations = new ArrayList<>();
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+
+        for (Simulation simulation : simulations) {
+            if (simulation.getUserName().equals(username)) {
+                userSimulations.add(simulation);
+            }
+        }
+
+        model.addAttribute("simulations", userSimulations);
+
+        return "reports";
+    }
+
+    @PostMapping("/generate_raport")
+    public String generate(@RequestParam(value = "selected_simulation") Long simulationId, Model model) throws Exception {
+        reportService.exportReport(simulationId);
+
+        String path = System.getProperty("user.dir") + File.separator + "raport" + File.separator + "output" + File.separator +
+                simulationService.getSimulation(simulationId).getSimulationName() + ".pdf";
+
+        model.addAttribute("raport_path", path);
+
+        return "generated";
+    }
+
 }

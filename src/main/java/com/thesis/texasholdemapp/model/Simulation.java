@@ -8,7 +8,11 @@ import java.util.Set;
 @Table(name = "simulation")
 public class Simulation {
 
-    public Simulation(String userName, String boardCards, Boolean isMonteCarlo, Long iterations, Date date) {
+    public Simulation() {
+    }
+
+    public Simulation(String simulationName, String userName, String boardCards, Boolean isMonteCarlo, Long iterations, Date date) {
+        this.simulationName = simulationName;
         this.userName = userName;
         this.boardCards = boardCards;
         this.isMonteCarlo = isMonteCarlo;
@@ -20,6 +24,9 @@ public class Simulation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "simulation_id")
     private Long id;
+
+    @Column(name = "simulation_name")
+    private String simulationName;
 
     @Column(name = "user_name")
     private String userName;
@@ -93,5 +100,13 @@ public class Simulation {
 
     public void setPlayers(Set<Player> players) {
         this.players = players;
+    }
+
+    public String getSimulationName() {
+        return simulationName;
+    }
+
+    public void setSimulationName(String simulationName) {
+        this.simulationName = simulationName;
     }
 }

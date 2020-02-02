@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.11.0.final using JasperReports Library version 6.11.0-0c4056ccaa4d25a5a8c45672d2f764ea3498bebb  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="simulation_report" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="55cbb29a-add3-4f5a-b863-7f2e85acc1a0">
+    <property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="poker_app"/>
+    <property name="com.jaspersoft.studio.unit." value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+    <queryString language="SQL">
+        <![CDATA[SELECT * from simulation]]>
+    </queryString>
+    <field name="simulation_id" class="java.lang.Long">
+        <property name="com.jaspersoft.studio.field.label" value="simulation_id"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="simulation"/>
+    </field>
+    <field name="board_cards" class="java.lang.String">
+        <property name="com.jaspersoft.studio.field.label" value="board_cards"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="simulation"/>
+    </field>
+    <field name="date_time" class="java.sql.Timestamp">
+        <property name="com.jaspersoft.studio.field.label" value="date_time"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="simulation"/>
+    </field>
+    <field name="monte_carlo" class="java.lang.Boolean">
+        <property name="com.jaspersoft.studio.field.label" value="monte_carlo"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="simulation"/>
+    </field>
+    <field name="iterations" class="java.lang.Integer">
+        <property name="com.jaspersoft.studio.field.label" value="iterations"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="simulation"/>
+    </field>
+    <field name="user_name" class="java.lang.String">
+        <property name="com.jaspersoft.studio.field.label" value="user_name"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="simulation"/>
+    </field>
+    <field name="simulation_name" class="java.lang.String">
+        <property name="com.jaspersoft.studio.field.label" value="simulation_name"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="simulation"/>
+    </field>
+    <background>
+        <band/>
+    </background>
+    <title>
+        <band height="72">
+            <frame>
+                <reportElement mode="Opaque" x="-20" y="-20" width="595" height="92" backcolor="#006699" uuid="0fed90e1-2ddd-47eb-ae0f-9e7c62d49eda"/>
+                <staticText>
+                    <reportElement x="20" y="20" width="316" height="43" forecolor="#FFFFFF" uuid="8705e7bf-8643-4729-9b0e-4ab26adb471f"/>
+                    <textElement>
+                        <font size="34" isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[Raport symulacji]]></text>
+                </staticText>
+            </frame>
+        </band>
+    </title>
+    <pageHeader>
+        <band height="13"/>
+    </pageHeader>
+    <detail>
+        <band height="223">
+            <property name="com.jaspersoft.studio.unit.height" value="px"/>
+            <textField textAdjust="StretchHeight">
+                <reportElement x="110" y="162" width="445" height="21" uuid="b68889de-cf3c-4aa6-92de-8e45433bcd4d">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="cabb7c63-0b04-4e95-a85f-8f07d23280d2"/>
+                </reportElement>
+                <textElement>
+                    <font size="16"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{board_cards}]]></textFieldExpression>
+            </textField>
+            <textField textAdjust="StretchHeight">
+                <reportElement x="110" y="71" width="445" height="21" uuid="45e77431-d209-4e6c-a1bd-3a734fda0cee">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="cd9e68fa-1de3-4069-b042-2ebaae8bb262"/>
+                </reportElement>
+                <textElement>
+                    <font size="16"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{date_time}]]></textFieldExpression>
+            </textField>
+            <textField textAdjust="StretchHeight">
+                <reportElement x="90" y="101" width="465" height="21" uuid="ea7e35c6-a907-4c64-be7d-e73ea468f172">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="17955469-6c53-49b9-9f64-e73a2fd7df4f"/>
+                </reportElement>
+                <textElement>
+                    <font size="16"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{monte_carlo}]]></textFieldExpression>
+            </textField>
+            <textField textAdjust="StretchHeight">
+                <reportElement x="90" y="131" width="465" height="21" uuid="27e70b4a-ba94-4ef4-9645-3499fa78b33c">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ac0b33ed-3539-4903-8652-dfb6cc31de5f"/>
+                </reportElement>
+                <textElement>
+                    <font size="16"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{iterations}]]></textFieldExpression>
+            </textField>
+            <textField textAdjust="StretchHeight">
+                <reportElement x="45" y="42" width="510" height="21" uuid="4443571b-77d1-4373-9ad5-e432a317380c">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5ec2d410-8861-4178-9fbc-c8ada7addf90"/>
+                </reportElement>
+                <textElement>
+                    <font size="16"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{user_name}]]></textFieldExpression>
+            </textField>
+            <textField textAdjust="StretchHeight">
+                <reportElement x="125" y="12" width="430" height="21" uuid="c453a7d1-69d2-4ce5-a35d-3107cb45bf09">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="10bb3214-9187-458c-9dc2-b536c59fccda"/>
+                </reportElement>
+                <textElement>
+                    <font size="16"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{simulation_name}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="0" y="12" width="125" height="21" uuid="79318be1-0e3e-4eb4-9fda-39cd929086db">
+                    <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                </reportElement>
+                <textElement>
+                    <font size="16" isBold="false"/>
+                </textElement>
+                <text><![CDATA[Nazwa symulacji:]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="0" y="42" width="45" height="21" uuid="29329ddf-6b97-4318-9b16-87764f5cba6f">
+                    <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                </reportElement>
+                <textElement>
+                    <font size="16" isBold="false"/>
+                </textElement>
+                <text><![CDATA[Autor:]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="0" y="71" width="110" height="21" uuid="dc41fd43-9819-4401-8323-4951b66b55be"/>
+                <textElement>
+                    <font size="16" isBold="false"/>
+                </textElement>
+                <text><![CDATA[Data symulacji:]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="0" y="101" width="90" height="21" uuid="a5d5eeac-d303-45c0-8657-12c531e9acff"/>
+                <textElement>
+                    <font size="16" isBold="false"/>
+                </textElement>
+                <text><![CDATA[Monte carlo:]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="0" y="131" width="90" height="21" uuid="5e9b1792-3ab2-4f80-bedc-ba2f2a0aab01"/>
+                <textElement>
+                    <font size="16" isBold="false"/>
+                </textElement>
+                <text><![CDATA[Ilosc iteracji:]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="0" y="162" width="110" height="21" uuid="8520d06c-b17a-403e-8c05-fde000c3d8af"/>
+                <textElement>
+                    <font size="16" isBold="false"/>
+                </textElement>
+                <text><![CDATA[Karty wspólne:]]></text>
+            </staticText>
+            <line>
+                <reportElement x="0" y="203" width="555" height="1" uuid="3bddab9c-8ac3-42d3-abb4-19e969a7e925"/>
+            </line>
+        </band>
+    </detail>
+    <columnFooter>
+        <band/>
+    </columnFooter>
+    <pageFooter>
+        <band height="17">
+            <textField>
+                <reportElement mode="Opaque" x="0" y="4" width="515" height="13" backcolor="#E6E6E6" uuid="c99a3944-3b1c-4559-a239-155d29ea18d9"/>
+                <textElement textAlignment="Right"/>
+                <textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+            </textField>
+            <textField evaluationTime="Report">
+                <reportElement mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6" uuid="26aa8928-1f58-42c5-aecd-6461ef66cabc"/>
+                <textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+            </textField>
+            <textField pattern="EEEEE dd MMMMM yyyy">
+                <reportElement x="0" y="4" width="100" height="13" uuid="f8733174-a203-4827-b144-d480e3de6e93"/>
+                <textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageFooter>
+    <summary>
+        <band/>
+    </summary>
+</jasperReport>

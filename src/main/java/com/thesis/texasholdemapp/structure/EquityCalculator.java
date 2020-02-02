@@ -177,26 +177,6 @@ public class EquityCalculator {
         return this;
     }
 
-
-    //testing method
-    public String printBoardCards() {
-        if(isBoardEmpty()) {
-            System.out.println("Board jest pusty");
-            return "Board jest pusty";
-        } else {
-            StringBuilder boardString = new StringBuilder();
-
-            for(Card card : boardCards) {
-                if(boardString.length() > 0) {
-                    boardString.append(" - ");
-                }
-                boardString.append(String.format("%s", card));
-            }
-            System.out.println(String.format("Bordzik: %s", boardString.toString()));
-            return String.format("Bordzik: %s", boardString.toString());
-        }
-    }
-
     public void calculateEquity() throws Exception {
         verifyDuplicates();
         rankings.clear();
@@ -396,6 +376,7 @@ public class EquityCalculator {
                     }
                 }
             } else {
+                maxIterations = 0;
                 //Normal method
                 for(int card1Index = 0; card1Index < remainingCount; card1Index++) {
                     Card card1 = remainingCards.get(card1Index);
@@ -445,6 +426,7 @@ public class EquityCalculator {
                             }
                         }
                     }
+                    maxIterations = equities.get(0).getPossibleHandsCount();
                 }
             }
 
@@ -516,6 +498,7 @@ public class EquityCalculator {
                     }
                 }
             } else {
+                maxIterations = 0;
                 for(Card card : remainingCards) {
                     boardCards.set(4, card);
 
@@ -557,6 +540,8 @@ public class EquityCalculator {
                             }
                         }
                     }
+
+                    maxIterations = equities.get(0).getPossibleHandsCount();
                 }
             }
 
@@ -564,6 +549,7 @@ public class EquityCalculator {
 
         //[RIVER]
         } else if(boardSize == 5) {
+            maxIterations = 1;
             highestRanking = null;
             highestRankingIndex = -1;
 

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.11.0.final using JasperReports Library version 6.11.0-0c4056ccaa4d25a5a8c45672d2f764ea3498bebb  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="players_report" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="94100f54-aedd-4eb2-8540-6c70fe37b19c">
+    <property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="poker_app"/>
+    <queryString language="SQL">
+        <![CDATA[SELECT * FROM player]]>
+    </queryString>
+    <field name="id" class="java.lang.Long">
+        <property name="com.jaspersoft.studio.field.label" value="id"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="player"/>
+    </field>
+    <field name="player_cards" class="java.lang.String">
+        <property name="com.jaspersoft.studio.field.label" value="player_cards"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="player"/>
+    </field>
+    <field name="simulations_splitted" class="java.lang.Integer">
+        <property name="com.jaspersoft.studio.field.label" value="simulations_splitted"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="player"/>
+    </field>
+    <field name="simulations_won" class="java.lang.Integer">
+        <property name="com.jaspersoft.studio.field.label" value="simulations_won"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="player"/>
+    </field>
+    <field name="simulation_id" class="java.lang.Long">
+        <property name="com.jaspersoft.studio.field.label" value="simulation_id"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="player"/>
+    </field>
+    <background>
+        <band/>
+    </background>
+    <title>
+        <band height="72">
+            <frame>
+                <reportElement mode="Opaque" x="-20" y="-20" width="595" height="92" backcolor="#006699" uuid="f4e2cff7-b1cd-4a9d-82ee-04e1088b10d4"/>
+                <staticText>
+                    <reportElement x="20" y="20" width="300" height="43" forecolor="#FFFFFF" uuid="1b8ca013-d316-4b2b-8204-9b59c7fabfd4"/>
+                    <textElement>
+                        <font size="34" isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[Raport symulacji]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="395" y="43" width="180" height="20" forecolor="#FFFFFF" uuid="007ffa77-d928-40ff-a7ae-d4ee9b79b5c8"/>
+                    <textElement textAlignment="Right">
+                        <font size="14" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Gracze]]></text>
+                </staticText>
+            </frame>
+        </band>
+    </title>
+    <pageHeader>
+        <band height="13"/>
+    </pageHeader>
+    <detail>
+        <band height="101">
+            <property name="com.jaspersoft.studio.unit.height" value="px"/>
+            <textField textAdjust="StretchHeight">
+                <reportElement x="95" y="6" width="460" height="21" uuid="014cd9ed-b9a8-4b75-be08-e910f603fd2e">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ae367a12-97a4-439c-bc15-cf3f9ca98167"/>
+                </reportElement>
+                <textElement>
+                    <font size="16"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{player_cards}]]></textFieldExpression>
+            </textField>
+            <textField textAdjust="StretchHeight">
+                <reportElement x="172" y="66" width="383" height="21" uuid="0ec2c154-ede4-482b-8a03-e0d45365479f">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8b590620-f63a-4d90-8701-9af918a4b147"/>
+                </reportElement>
+                <textElement>
+                    <font size="16"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{simulations_splitted}]]></textFieldExpression>
+            </textField>
+            <textField textAdjust="StretchHeight">
+                <reportElement x="140" y="36" width="415" height="21" uuid="78e612af-48a6-4df7-b8f0-62c22db0317c">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ac415e0d-d8fd-4ad0-9f4c-b6d51be4ac28"/>
+                </reportElement>
+                <textElement>
+                    <font size="16"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{simulations_won}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="0" y="6" width="95" height="21" uuid="6d120a4b-55d3-4e19-bbcd-51a1603091e2">
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                </reportElement>
+                <textElement>
+                    <font size="16"/>
+                </textElement>
+                <text><![CDATA[Karty gracza: ]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="0" y="36" width="140" height="21" uuid="d549ee28-88b4-4e63-9caa-6dd6d26d76f7">
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                </reportElement>
+                <textElement>
+                    <font size="16"/>
+                </textElement>
+                <text><![CDATA[Rozdania wygrane:]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="0" y="66" width="172" height="21" uuid="b4b1e2fe-1a93-4a73-96be-f2014dfa07bf">
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                </reportElement>
+                <textElement>
+                    <font size="16"/>
+                </textElement>
+                <text><![CDATA[Rozdania zremisowane:]]></text>
+            </staticText>
+            <line>
+                <reportElement x="0" y="98" width="340" height="1" forecolor="#666666" uuid="92334412-58ca-417f-9bc9-4df536298e03"/>
+            </line>
+        </band>
+    </detail>
+    <columnFooter>
+        <band/>
+    </columnFooter>
+    <pageFooter>
+        <band height="17">
+            <textField>
+                <reportElement mode="Opaque" x="0" y="4" width="515" height="13" backcolor="#E6E6E6" uuid="11e0e713-a6fc-4828-96e6-ee42813af1c6"/>
+                <textElement textAlignment="Right"/>
+                <textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+            </textField>
+            <textField evaluationTime="Report">
+                <reportElement mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6" uuid="54310db3-08d9-46f3-b56f-3f6faf0df5b2"/>
+                <textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+            </textField>
+            <textField pattern="EEEEE dd MMMMM yyyy">
+                <reportElement x="0" y="4" width="100" height="13" uuid="c70ba18a-1acf-41ad-9544-13dd044f483e"/>
+                <textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageFooter>
+    <summary>
+        <band/>
+    </summary>
+</jasperReport>

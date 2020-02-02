@@ -140,9 +140,6 @@ public class EquityHandler {
             equityCalculator.calculateEquity();
             long elapsedTime = System.currentTimeMillis() - startTime;
 
-
-            equityCalculator.printBoardCards();
-
             float minSpliters = hands.size();
 
             for(int index = 0; index < hands.size(); index++) {

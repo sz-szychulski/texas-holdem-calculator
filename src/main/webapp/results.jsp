@@ -27,43 +27,52 @@
             crossorigin="anonymous"></script>
 </head>
 <body>
-<div class="content-container">
-    <h1>Aplikacja wspierająca podejmowanie decyzji w grze Texas Hold'em</h1>
+    <div class="content-container">
+        <h1>Aplikacja wspierająca podejmowanie decyzji w grze Texas Hold'em</h1>
 
-    <hr/>
+        <hr/>
 
-    <div class="board-results">
-        <h2>Karty wspólne</h2>
-        <c:forEach items="${board_cards}" var="card">
-            <img src="/images/${card}.png" />
-        </c:forEach>
-    </div>
-
-    <hr/>
-
-    <div class="players-results">
-    <c:forEach var = "index" begin = "0" end = "${players}">
-        <div>
-            <h5>Gracz <c:out value = "${index + 1}"/></h5>
-            <img src="/images/<c:out value = "${hands_string[index][0]}"/>.png" />
-            <img src="/images/<c:out value = "${hands_string[index][1]}"/>.png" />
-            <br/><br/>
-            <p>Układ: <c:out value = "${hand_rankings[index]}"/></p>
-            <p>Całkowite szanse: <fmt:formatNumber type="number" maxFractionDigits="2" value="${total_equity[index]}"/>%</p>
-            <p>Szanse wygranej: <fmt:formatNumber type="number" maxFractionDigits="2" value="${total_win[index]}"/>%</p>
-            <p>Podział puli: <fmt:formatNumber type="number" maxFractionDigits="2" value="${total_split[index]}"/>%</p>
+        <div class="board-results">
+            <h2>Karty wspólne</h2>
+            <c:forEach items="${board_cards}" var="card">
+                <img src="/images/${card}.png" />
+            </c:forEach>
         </div>
-        <hr />
-    </c:forEach>
+
+        <hr/>
+
+        <div class="players-results">
+        <c:forEach var = "index" begin = "0" end = "${players}">
+            <div>
+                <h5>Gracz <c:out value = "${index + 1}"/></h5>
+                <img src="/images/<c:out value = "${hands_string[index][0]}"/>.png" />
+                <img src="/images/<c:out value = "${hands_string[index][1]}"/>.png" />
+                <br/><br/>
+                <p>Układ: <c:out value = "${hand_rankings[index]}"/></p>
+                <p>Całkowite szanse: <fmt:formatNumber type="number" maxFractionDigits="2" value="${total_equity[index]}"/>%</p>
+                <p>Szanse wygranej: <fmt:formatNumber type="number" maxFractionDigits="2" value="${total_win[index]}"/>%</p>
+                <p>Podział puli: <fmt:formatNumber type="number" maxFractionDigits="2" value="${total_split[index]}"/>%</p>
+            </div>
+            <hr />
+        </c:forEach>
+        </div>
+
+
+        <h3>Zapis symulacji do bazy danych</h3>
+        <form action="/save" method="post" class="general">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+            <div>
+                <label for="simulationName">Nazwa symulacji: </label>
+                <input type="text" id="simulationName" name="simulationName">
+            </div>
+            <div style="float: left">
+                <input type="submit" value="Zapisz do bazy"/>
+            </div>
+        </form>
+        <div style="float: left">
+            <a href="/" ><button>Wróć</button></a>
+        </div>
     </div>
-
-    <a href="/save"><button>Zapisz do bazy</button></a>
-
-    <div style="float: left">
-        <a href="/" ><button>Wróć</button></a>
-    </div>
-
-</div>
 
 </body>
 </html>
