@@ -27,11 +27,31 @@
             crossorigin="anonymous"></script>
 </head>
 <body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">Praca inżynierska</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Strona główna<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/reports">Raporty</a>
+                </li>
+            </ul>
+            <span class="navbar-text">
+          <h5>Witaj ${pageContext.request.userPrincipal.name} <button onclick="document.forms['logoutForm'].submit()">Wyloguj</button></h5>
+        </span>
+        </div>
+    </nav>
+
+    <br/>
+
     <div class="content-container">
         <h1>Aplikacja wspierająca podejmowanie decyzji w grze Texas Hold'em</h1>
-        <div>
-            <p>Witaj ${pageContext.request.userPrincipal.name} <button onclick="document.forms['logoutForm'].submit()">Wyloguj</button></p>
-        </div>
 
         <hr/>
 
@@ -40,12 +60,6 @@
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </form>
         </c:if>
-
-        <div>
-            <a href="/reports"><button id="generateRaport" >Wygeneruj raport z bazy</button></a>
-        </div>
-
-        <br/>
 
         <form method="post" class="general" action="/calculate">
             <div>
@@ -193,7 +207,7 @@
                     <input type="text" id="player10-2-field" name="player10" hidden/>
                 </div>
                 <div class="calculate-button">
-                    <input type="submit" value="Oblicz" />
+                    <input type="submit" value="Oblicz" data-toggle="modal" data-target="#loadingModal"/>
                 </div>
             </div>
         </form>
@@ -446,6 +460,19 @@
                             </div>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="loadingModal" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                        <div class="modal-body text-center">
+                            <h2>Obliczanie...</h2>
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Obliczanie...</span>
+                            </div>
+                        </div>
                 </div>
             </div>
         </div>

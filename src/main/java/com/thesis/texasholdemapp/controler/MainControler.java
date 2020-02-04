@@ -271,4 +271,12 @@ public class MainControler {
         return "generated";
     }
 
+    @PostMapping("/delete_raport")
+    public String delete(@RequestParam(value = "delete_simulation") Long simulationId, Model model) throws Exception {
+        Simulation simulation = simulationService.getSimulation(simulationId);
+        simulationService.deleteSimulation(simulation);
+
+        return "redirect:/reports";
+    }
+
 }

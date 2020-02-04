@@ -27,33 +27,72 @@
             crossorigin="anonymous"></script>
 </head>
 <body>
-<div class="content-container">
-    <h1>Aplikacja wspierająca podejmowanie decyzji w grze Texas Hold'em</h1>
 
-    <hr/>
-
-    <h2>Raporty</h2>
-    <form action="/generate_raport" method="post" class="general">
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-        <div>
-            <label for="selected_simulation">Wybierz symulacje: </label>
-            <select name="selected_simulation" id="selected_simulation">
-                <c:forEach items="${simulations}" var="simulation">
-                    <option value="${simulation.id}">${simulation.simulationName}</option>
-                </c:forEach>
-            </select>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">Praca inżynierska</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Strona główna</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/reports">Raporty<span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+            <span class="navbar-text">
+          <h5>Witaj ${pageContext.request.userPrincipal.name} <button onclick="document.forms['logoutForm'].submit()">Wyloguj</button></h5>
+        </span>
         </div>
+    </nav>
+
+    <br/>
+
+    <div class="content-container">
+
+        <h1>Aplikacja wspierająca podejmowanie decyzji w grze Texas Hold'em</h1>
+
+        <hr/>
+
+        <h2>Wygeneruj Raport</h2>
+        <form action="/generate_raport" method="post" class="general">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+            <div>
+                <label for="selected_simulation">Wybierz symulacje: </label>
+                <select name="selected_simulation" id="selected_simulation">
+                    <c:forEach items="${simulations}" var="simulation">
+                        <option value="${simulation.id}">${simulation.simulationName}</option>
+                    </c:forEach>
+                </select>
+                <input type="submit" value="Wybierz" />
+            </div>
+        </form>
+
+        <br />
+
+        <h2>Usuń Raport</h2>
+        <form action="/delete_raport" method="post" class="general">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+            <div>
+                <label for="delete_simulation">Wybierz symulacje: </label>
+                <select name="delete_simulation" id="delete_simulation">
+                    <c:forEach items="${simulations}" var="simulation">
+                        <option value="${simulation.id}">${simulation.simulationName}</option>
+                    </c:forEach>
+                </select>
+                <input type="submit" value="Usuń" />
+            </div>
+        </form>
+
+        <br/>
+
         <div style="float: left">
-            <input type="submit" value="Wybierz" />
+            <a href="/" ><button>Wróć</button></a>
         </div>
-    </form>
 
-
-    <div style="float: left">
-        <a href="/" ><button>Wróć</button></a>
     </div>
-
-</div>
 
 </body>
 </html>
